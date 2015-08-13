@@ -17,10 +17,11 @@ set(DOXYGEN_TEMPLATE "
     EXTRACT_ALL             = YES
     EXTRACT_PRIVATE         = NO
     EXTRACT_STATIC          = NO
-    FILE_PATTERNS           = *.h *.hpp *.hxx *.c *.cc *.cpp *.cxx *.dox *.md ${FERN_EXTERNAL_SOURCES_FILE_PATTERNS}
+    FILE_PATTERNS           = *.h *.hpp *.hxx *.c *.cc *.cpp *.cxx *.dox *.md ${DEVBASE_DOXYGEN_EXTERNAL_SOURCES_FILE_PATTERNS}
     FULL_PATH_NAMES         = YES
     GENERATE_LATEX          = NO
     GENERATE_TODOLIST       = ${DEVBASE_DOXYGEN_GENERATE_TODOLIST}
+    INPUT                   = ${DEVBASE_DOXYGEN_INPUT}
     HAVE_DOT                = YES
     INCLUDE_GRAPH           = YES
     INHERIT_DOCS            = YES
