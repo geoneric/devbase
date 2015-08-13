@@ -1,3 +1,12 @@
+# Only generate the TODO page in Debug configurations. Note that this only
+# works for single-configuration generators like make. The idea is not to
+# install a TODO list page in the API docs when releasing a project.
+set(DEVBASE_DOXYGEN_GENERATE_TODOLIST "NO")
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    set(DEVBASE_DOXYGEN_GENERATE_TODOLIST "YES")
+endif()
+
+
 set(DOXYGEN_TEMPLATE "
     ALWAYS_DETAILED_SEC     = YES
     BUILTIN_STL_SUPPORT     = YES
@@ -11,7 +20,7 @@ set(DOXYGEN_TEMPLATE "
     FILE_PATTERNS           = *.h *.hpp *.hxx *.c *.cc *.cpp *.cxx *.dox *.md ${FERN_EXTERNAL_SOURCES_FILE_PATTERNS}
     FULL_PATH_NAMES         = YES
     GENERATE_LATEX          = NO
-    GENERATE_TODOLIST       = ${FERN_DOXYGEN_GENERATE_TODOLIST}
+    GENERATE_TODOLIST       = ${DEVBASE_DOXYGEN_GENERATE_TODOLIST}
     HAVE_DOT                = YES
     INCLUDE_GRAPH           = YES
     INHERIT_DOCS            = YES
