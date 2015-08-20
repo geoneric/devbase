@@ -64,7 +64,7 @@ function(create_sphinx_docs)
             ${COPIED_SPHINX_SOURCES}
     )
 
-    add_custom_target(${SPHINX_DOCS_TARGET} # ALL
+    add_custom_target(${SPHINX_DOCS_TARGET} ALL
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_build/html/index.html
     )
 endfunction()
