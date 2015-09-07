@@ -81,7 +81,6 @@ if(DEVBASE_CURSES_REQUIRED)
             /opt/local/include
         )
         link_directories(
-            SYSTEM
             /opt/local/lib
         )
     endif()
