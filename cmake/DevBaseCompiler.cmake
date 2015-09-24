@@ -44,8 +44,8 @@ include(CheckCXXCompilerFlag)
 # -Werror -Wall -Wextra -Wpedantic -Wcast-align -Wcast-qual -Wconversion -Wctor-dtor-privacy -Wdisabled-optimization -Wdouble-promotion -Wfloat-equal -Wformat=2 -Winit-self -Winvalid-pch -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wtrampolines -Wundef -Wunsafe-loop-optimizations -Wvector-operation-performance -Wzero-as-null-pointer-constant
 
 
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR
-        ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
+        CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     # TODO Figure this out:
     # https://gcc.gnu.org/wiki/Visibility
 
@@ -97,15 +97,18 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR
             endif()
         endif()
     endif()
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_SCL_SECURE_NO_WARNINGS /wd4101")
 endif()
 
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
     # Make linker report any unresolved symbols.
     set(CMAKE_SHARED_LINKER_FLAGS
         "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
-elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 endif()

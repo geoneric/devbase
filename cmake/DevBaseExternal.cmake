@@ -46,6 +46,9 @@ if(DEVBASE_BOOST_REQUIRED)
     list(REMOVE_DUPLICATES DEVBASE_REQUIRED_BOOST_COMPONENTS)
     find_package(Boost REQUIRED
         COMPONENTS ${DEVBASE_REQUIRED_BOOST_COMPONENTS})
+    if(NOT Boost_FOUND)
+        message(FATAL_ERROR "Boost not found")
+    endif()
     include_directories(
         SYSTEM
         ${Boost_INCLUDE_DIRS}
@@ -71,7 +74,6 @@ if(DEVBASE_BOOST_REQUIRED)
     else()
         set(DEVBASE_BOOST_LEXICAL_CAST_PROVIDES_TRY_LEXICAL_CONVERT FALSE)
     endif()
-
 endif()
 
 

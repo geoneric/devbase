@@ -189,10 +189,11 @@ macro(add_unit_test)
 
     add_executable(${TEST_EXE_NAME} ${TEST_MODULE_NAME}
         ${ADD_UNIT_TEST_OBJECT_LIBRARIES})
+
     target_link_libraries(${TEST_EXE_NAME}
         ${ADD_UNIT_TEST_LINK_LIBRARIES}
-        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-        stdc++)
+        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+
     add_test(NAME ${TEST_EXE_NAME}
         # catch_system_errors: Prevent UTF to detect system errors. This
         #     messes things up when doing system calls to Python unit tests.
