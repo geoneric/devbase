@@ -130,6 +130,11 @@ if(DEVBASE_DOXYGEN_REQUIRED)
 endif()
 
 
+if(DEVBASE_FERN_REQUIRED)
+    find_package(Fern REQUIRED)
+endif()
+
+
 if(DEVBASE_GDAL_REQUIRED)
     find_package(GDAL REQUIRED)
     include_directories(
@@ -164,18 +169,24 @@ endif()
 
 
 if(DEVBASE_IMAGE_MAGICK_REQUIRED)
-    FIND_PACKAGE(ImageMagick REQUIRED
+    find_package(ImageMagick REQUIRED
         COMPONENTS convert)
 endif()
 
 
+if(DEVBASE_LATEX_REQUIRED)
+    # TODO Find LaTeX.
+    include(UseLATEX)
+endif()
+
+
 if(DEVBASE_LIB_XML2_REQUIRED)
-    FIND_PACKAGE(LibXml2 REQUIRED)
+    find_package(LibXml2 REQUIRED)
 endif()
 
 
 if(DEVBASE_LIB_XSLT_REQUIRED)
-    FIND_PACKAGE(LibXslt REQUIRED)
+    find_package(LibXslt REQUIRED)
 
     if(DEVBASE_LIB_XSLT_XSLTPROC_REQUIRED)
         if(NOT LIBXSLT_XSLTPROC_EXECUTABLE)
@@ -276,6 +287,12 @@ if(DEVBASE_QWT_REQUIRED)
     message(STATUS "Found Qwt: ${Boost_INCLUDE_DIRS}")
     message(STATUS "  includes : ${QWT_INCLUDE_DIRS}")
     message(STATUS "  libraries: ${QWT_LIBRARIES}")
+endif()
+
+
+if(DEVBASE_SPHINX_REQUIRED)
+    # TODO Find Sphinx Python package.
+    include(SphinxDoc)
 endif()
 
 
