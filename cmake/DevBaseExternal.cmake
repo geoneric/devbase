@@ -127,6 +127,10 @@ endif()
 
 if(DEVBASE_DOXYGEN_REQUIRED)
     find_package(Doxygen REQUIRED)
+
+    if(NOT DOXYGEN_FOUND)
+        message(FATAL_ERROR "Doxygen not found")
+    endif()
 endif()
 
 
@@ -168,6 +172,24 @@ if(DEVBASE_GEOS_REQUIRED)
 endif()
 
 
+if(DEVBASE_HDF5_REQUIRED)
+    list(REMOVE_DUPLICATES DEVBASE_REQUIRED_HDF5_COMPONENTS)
+    find_package(HDF5 REQUIRED
+        COMPONENTS ${DEVBASE_REQUIRED_HDF5_COMPONENTS})
+    if(NOT HDF5_FOUND)
+        message(FATAL_ERROR "HDF5 not found")
+    endif()
+    include_directories(
+        SYSTEM
+        ${HDF5_INCLUDE_DIRS}
+    )
+    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
+        ${HDF5_LIBRARIES}
+    )
+    add_definitions(${HDF5_DEFINITIONS})
+endif()
+
+
 if(DEVBASE_IMAGE_MAGICK_REQUIRED)
     find_package(ImageMagick REQUIRED
         COMPONENTS convert)
@@ -193,6 +215,23 @@ if(DEVBASE_LIB_XSLT_REQUIRED)
             message(FATAL_ERROR "xsltproc executable not found")
         endif()
     endif()
+endif()
+
+
+if(DEVBASE_MPI_REQUIRED)
+    find_package(MPI REQUIRED)
+
+    if(NOT MPI_C_FOUND)
+        message(FATAL_ERROR "MPI for C not found")
+    endif()
+
+    include_directories(
+        SYSTEM
+        ${MPI_C_INCLUDE_PATH}
+    )
+    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
+        ${MPI_C_LIBRARIES}
+    )
 endif()
 
 
