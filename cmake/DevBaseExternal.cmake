@@ -14,6 +14,10 @@ if((NOT PEACOCK_PREFIX) AND (DEFINED ENV{PEACOCK_PREFIX}))
 endif()
 
 if(PEACOCK_PREFIX)
+    # # if cross compiling:
+    # set(CMAKE_FIND_ROOT_PATH
+    #     ${PEACOCK_PREFIX}/${peacock_target_platform})
+    # else:
     set(CMAKE_PREFIX_PATH
         ${PEACOCK_PREFIX}/${peacock_target_platform}
         ${CMAKE_PREFIX_PATH}
@@ -21,6 +25,17 @@ if(PEACOCK_PREFIX)
     message(STATUS "Probing Peacock builds in: ${PEACOCK_PREFIX}/${peacock_target_platform}")
     set(CMAKE_INCLUDE_DIRECTORIES_BEFORE TRUE)
 endif()
+
+
+# Variable that can be set in this module:
+#
+# DEVBASE_EXTERNAL_SOURCES
+#   List with directory pathnames containing sources to document. These are
+#   used to tell Doxygen which files to document.
+# DEVBASE_DOXYGEN_EXTERNAL_SOURCES_FILE_PATTERNS
+#   List with filename patterns of external sources to document. Only needed
+#   for non-standard filename patterns. These are used to tell Doxygen which
+#   files to document.
 
 
 # Configure and find packages, configure project. ------------------------------
@@ -134,6 +149,18 @@ if(DEVBASE_DOXYGEN_REQUIRED)
 endif()
 
 
+if(DEVBASE_EXPAT_REQUIRED)
+    find_package(EXPAT REQUIRED)
+    include_directories(
+        SYSTEM
+        ${EXPAT_INCLUDE_DIRS}
+    )
+    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
+        ${EXPAT_LIBRARIES}
+    )
+endif()
+
+
 if(DEVBASE_FERN_REQUIRED)
     find_package(Fern REQUIRED)
 endif()
@@ -190,6 +217,20 @@ if(DEVBASE_HDF5_REQUIRED)
 endif()
 
 
+if(DEVBASE_HPX_REQUIRED)
+    # TODO Set HPX_DIR to dir containing HPXConfig.cmake.
+    # See lib/cmake/hpx/HPXTargets.cmake for names of HPX targets to link
+    # against.
+
+    # HPX updates CMAKE_CXX_FLAGS (adds -std=c++11, see HPXConfig.cmake).
+    # We want to do this ourselves.
+    set(_flags ${CMAKE_CXX_FLAGS})
+    find_package(HPX REQUIRED)
+    set(CMAKE_CXX_FLAGS ${_flags})
+    include_directories(${HPX_INCLUDE_DIRS})
+endif()
+
+
 if(DEVBASE_IMAGE_MAGICK_REQUIRED)
     find_package(ImageMagick REQUIRED
         COMPONENTS convert)
@@ -218,6 +259,11 @@ if(DEVBASE_LIB_XSLT_REQUIRED)
 endif()
 
 
+if(DEVBASE_LOKI_REQUIRED)
+    find_package(Loki REQUIRED)
+endif()
+
+
 if(DEVBASE_MPI_REQUIRED)
     find_package(MPI REQUIRED)
 
@@ -232,6 +278,35 @@ if(DEVBASE_MPI_REQUIRED)
     list(APPEND DEVBASE_EXTERNAL_LIBRARIES
         ${MPI_C_LIBRARIES}
     )
+endif()
+
+
+if(DEVBASE_NETCDF_REQUIRED)
+    find_package(NetCDF REQUIRED)
+    include_directories(
+        SYSTEM
+        ${NETCDF_INCLUDE_DIRS}
+    )
+    find_program(NCGEN ncgen
+        HINTS ${NETCDF_INCLUDE_DIRS}/../bin
+    )
+    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
+        ${NETCDF_LIBRARIES}
+    )
+    message(STATUS "Found NetCDF:")
+    message(STATUS "  includes : ${NETCDF_INCLUDE_DIRS}")
+    message(STATUS "  libraries: ${NETCDF_LIBRARIES}")
+endif()
+
+
+if(DEVBASE_NUMPY_REQUIRED)
+    find_package(NumPy REQUIRED)
+    include_directories(
+        SYSTEM
+        ${NUMPY_INCLUDE_DIRS}
+    )
+    # http://docs.scipy.org/doc/numpy-dev/reference/c-api.deprecations.html
+    add_definitions(-DNPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION)
 endif()
 
 
@@ -329,6 +404,18 @@ if(DEVBASE_QWT_REQUIRED)
 endif()
 
 
+if(DEVBASE_READLINE_REQUIRED)
+    find_package(Readline REQUIRED)
+    include_directories(
+        SYSTEM
+        ${READLINE_INCLUDE_DIR}
+    )
+    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
+        ${READLINE_LIBRARY}
+    )
+endif()
+
+
 if(DEVBASE_SPHINX_REQUIRED)
     # TODO Find Sphinx Python package.
     include(SphinxDoc)
@@ -337,6 +424,11 @@ endif()
 
 if(DEVBASE_SQLITE_REQUIRED)
     find_package(SQLite3 REQUIRED)
+endif()
+
+
+if(DEVBASE_SWIG_REQUIRED)
+    find_package(SWIG REQUIRED)
 endif()
 
 
@@ -358,10 +450,16 @@ if(DEVBASE_XSD_REQUIRED)
         SYSTEM
         ${XSD_INCLUDE_DIRS}
     )
-    # list(APPEND DEVBASE_EXTERNAL_SOURCES ${XSD_INCLUDE_DIRS})
-    # list(APPEND DEVBASE_EXTERNAL_SOURCES_FILE_PATTERNS *.ixx)
-    # list(APPEND DEVBASE_EXTERNAL_SOURCES_FILE_PATTERNS *.txx)
+    list(APPEND DEVBASE_EXTERNAL_SOURCES ${XSD_INCLUDE_DIRS})
+    list(APPEND DEVBASE_DOXYGEN_EXTERNAL_SOURCES_FILE_PATTERNS *.ixx)
+    list(APPEND DEVBASE_DOXYGEN_EXTERNAL_SOURCES_FILE_PATTERNS *.txx)
     message(STATUS "Found XSD:")
     message(STATUS "  includes  : ${XSD_INCLUDE_DIRS}")
     message(STATUS "  executable: ${XSD_EXECUTABLE}")
 endif()
+
+
+# Turn list into a space-separated string. This string is used by
+# DoxygenDoc.cmake.
+string(REPLACE ";" " " DEVBASE_DOXYGEN_EXTERNAL_SOURCES_FILE_PATTERNS
+    "${DEVBASE_DOXYGEN_EXTERNAL_SOURCES_FILE_PATTERNS}")
