@@ -251,6 +251,18 @@ function(add_unit_tests)
 endfunction()
 
 
+# Tests can be added conditionally. When the build is configured, the
+# DEVBASE_BUILD_TEST variable can be set to TRUE or FALSE. Depending on
+# its setting tests are build or not.
+# DIRECTORY_NAME: Name of subdirectory containing the target.
+function(add_test_conditionally
+        DIRECTORY_NAME)
+    if(DEVBASE_BUILD_TEST)
+        add_subdirectory(${DIRECTORY_NAME})
+    endif()
+endfunction()
+
+
 # Copy Python test modules from current source directory to current binary
 # directory. For each module a custom command is created so editing a test
 # module in the source directory will trigger a copy to the binary directory.
