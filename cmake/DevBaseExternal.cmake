@@ -137,6 +137,11 @@ endif()
 
 if(DEVBASE_GDAL_REQUIRED)
     find_package(GDAL REQUIRED)
+
+    if(NOT GDAL_FOUND)
+        message(FATAL_ERROR "GDAL not found")
+    endif()
+
     include_directories(
         SYSTEM
         ${GDAL_INCLUDE_DIRS}
@@ -153,6 +158,8 @@ if(DEVBASE_GDAL_REQUIRED)
     else()
         SET(GDAL_DATA ${GDAL_DIRECTORY}/share/gdal)
     endif()
+
+    include(CheckGDalLibrary)
 endif()
 
 
