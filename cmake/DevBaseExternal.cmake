@@ -6,24 +6,26 @@
 # header files and libraries.
 # See also: https://github.com/geoneric/peacock
 
-# If the PEACOCK_PREFIX CMake variable is not set, but an environment
-# variable with that name is, then copy it to a CMake variable. This way
-# the CMake variable takes precedence.
-if((NOT PEACOCK_PREFIX) AND (DEFINED ENV{PEACOCK_PREFIX}))
-    set(PEACOCK_PREFIX $ENV{PEACOCK_PREFIX})
-endif()
+if(NOT peacock_compiler_found)
+    # If the PEACOCK_PREFIX CMake variable is not set, but an environment
+    # variable with that name is, then copy it to a CMake variable. This way
+    # the CMake variable takes precedence.
+    if((NOT PEACOCK_PREFIX) AND (DEFINED ENV{PEACOCK_PREFIX}))
+        set(PEACOCK_PREFIX $ENV{PEACOCK_PREFIX})
+    endif()
 
-if(PEACOCK_PREFIX)
-    # # if cross compiling:
-    # set(CMAKE_FIND_ROOT_PATH
-    #     ${PEACOCK_PREFIX}/${peacock_target_platform})
-    # else:
-    set(CMAKE_PREFIX_PATH
-        ${PEACOCK_PREFIX}/${peacock_target_platform}
-        ${CMAKE_PREFIX_PATH}
-    )
-    message(STATUS "Probing Peacock builds in: ${PEACOCK_PREFIX}/${peacock_target_platform}")
-    set(CMAKE_INCLUDE_DIRECTORIES_BEFORE TRUE)
+    if(PEACOCK_PREFIX)
+        # # if cross compiling:
+        # set(CMAKE_FIND_ROOT_PATH
+        #     ${PEACOCK_PREFIX}/${peacock_target_platform})
+        # else:
+        set(CMAKE_PREFIX_PATH
+            ${PEACOCK_PREFIX}/${peacock_target_platform}
+            ${CMAKE_PREFIX_PATH}
+        )
+        message(STATUS "Probing Peacock builds in: ${PEACOCK_PREFIX}/${peacock_target_platform}")
+        set(CMAKE_INCLUDE_DIRECTORIES_BEFORE TRUE)
+    endif()
 endif()
 
 
