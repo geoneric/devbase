@@ -172,7 +172,12 @@ endmacro()
 macro(add_unit_test)
     set(OPTIONS "")
     set(ONE_VALUE_ARGUMENTS SCOPE NAME)
-    set(MULTI_VALUE_ARGUMENTS OBJECT_LIBRARIES LINK_LIBRARIES DEPENDENCIES)
+    set(MULTI_VALUE_ARGUMENTS
+        SUPPORT_NAMES
+        OBJECT_LIBRARIES
+        LINK_LIBRARIES
+        DEPENDENCIES
+    )
 
     cmake_parse_arguments(ADD_UNIT_TEST "${OPTIONS}" "${ONE_VALUE_ARGUMENTS}"
         "${MULTI_VALUE_ARGUMENTS}" ${ARGN})
@@ -188,6 +193,7 @@ macro(add_unit_test)
     set(TEST_EXE_NAME ${ADD_UNIT_TEST_SCOPE}_${TEST_MODULE_NAME})
 
     add_executable(${TEST_EXE_NAME} ${TEST_MODULE_NAME}
+        ${ADD_UNIT_TEST_SUPPORT_NAMES}
         ${ADD_UNIT_TEST_OBJECT_LIBRARIES})
 
     target_link_libraries(${TEST_EXE_NAME}
@@ -224,8 +230,13 @@ endmacro()
 function(add_unit_tests)
     set(OPTIONS "")
     set(ONE_VALUE_ARGUMENTS SCOPE)
-    set(MULTI_VALUE_ARGUMENTS NAMES OBJECT_LIBRARIES LINK_LIBRARIES
-        DEPENDENCIES)
+    set(MULTI_VALUE_ARGUMENTS
+        NAMES
+        SUPPORT_NAMES
+        OBJECT_LIBRARIES
+        LINK_LIBRARIES
+        DEPENDENCIES
+    )
 
     cmake_parse_arguments(ADD_UNIT_TESTS "${OPTIONS}" "${ONE_VALUE_ARGUMENTS}"
         "${MULTI_VALUE_ARGUMENTS}" ${ARGN})
@@ -241,6 +252,7 @@ function(add_unit_tests)
         add_unit_test(
             SCOPE ${ADD_UNIT_TESTS_SCOPE}
             NAME ${NAME}
+            SUPPORT_NAMES ${ADD_UNIT_TESTS_SUPPORT_NAMES}
             OBJECT_LIBRARIES ${ADD_UNIT_TESTS_OBJECT_LIBRARIES}
             LINK_LIBRARIES ${ADD_UNIT_TESTS_LINK_LIBRARIES})
         set(target_name ${ADD_UNIT_TESTS_SCOPE}_${NAME})
