@@ -334,12 +334,21 @@ endif()
 
 if(DEVBASE_PCRASTER_RASTER_FORMAT_REQUIRED)
     find_package(PCRasterRasterFormat REQUIRED)
+
+    if(NOT PCRASTER_RASTER_FORMAT_FOUND)
+        message(FATAL_ERROR "PCRaster Raster Format library not found")
+    endif()
+
     include_directories(
         ${PCRASTER_RASTER_FORMAT_INCLUDE_DIRS}
     )
     list(APPEND DEVBASE_EXTERNAL_LIBRARIES
         ${PCRASTER_RASTER_FORMAT_LIBRARIES}
     )
+
+    message(STATUS "Found PCRaster Raster Format:")
+    message(STATUS "  includes : ${PCRASTER_RASTER_FORMAT_INCLUDE_DIRS}")
+    message(STATUS "  libraries: ${PCRASTER_RASTER_FORMAT_LIBRARIES}")
 endif()
 
 
