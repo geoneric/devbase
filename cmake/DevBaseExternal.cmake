@@ -6,7 +6,7 @@
 # header files and libraries.
 # See also: https://github.com/geoneric/peacock
 
-if(NOT peacock_compiler_found)
+if(peacock_compiler_found)
     # If the PEACOCK_PREFIX CMake variable is not set, but an environment
     # variable with that name is, then copy it to a CMake variable. This way
     # the CMake variable takes precedence.
