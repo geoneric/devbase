@@ -10,7 +10,6 @@
 # Normalize host system name:
 # linux, windows, cygwin
 set(host_system_name ${CMAKE_HOST_SYSTEM_NAME})
-message(${CMAKE_HOST_SYSTEM_NAME})
 if(host_system_name STREQUAL "Linux")
     set(host_system_name "linux")
 elseif(host_system_name STREQUAL "Darwin")
