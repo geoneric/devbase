@@ -122,7 +122,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 endif()
 
 
