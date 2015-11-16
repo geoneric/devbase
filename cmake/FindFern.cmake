@@ -11,100 +11,83 @@
 #             that the Fern headers and libraries can be found in
 #             ${FERN_ROOT}/include and ${FERN_ROOT}/lib, respectively.
 
-IF(DEFINED ENV{FERN_ROOT})
+if(DEFINED ENV{FERN_ROOT})
     SET(_FERN_ROOT $ENV{FERN_ROOT})
     SET(_FERN_ROOT_INCLUDE ${_FERN_ROOT}/include)
     SET(_FERN_ROOT_LIB ${_FERN_ROOT}/lib)
-ENDIF()
+endif()
 
 
-FIND_PATH(FERN_INCLUDE_DIRS
+find_path(FERN_INCLUDE_DIRS
     NAMES fern/core/string.h
     PATHS ${_FERN_ROOT_INCLUDE}
 )
 
 
-FIND_LIBRARY(FERN_ALGORITHM_CORE_LIBRARY
-    NAMES fern_algorithm_core
+find_library(FERN_ALGORITHM_LIBRARY
+    NAMES fern_algorithm
     PATHS ${_FERN_ROOT_LIB}
 )
-IF(WIN32)
-    FIND_LIBRARY(FERN_ALGORITHM_CORE_DEBUG_LIBRARY
-        NAMES fern_algorithm_cored
+if(WIN32)
+    find_library(FERN_ALGORITHM_DEBUG_LIBRARY
+        NAMES fern_algorithmd
         PATHS ${_FERN_ROOT_LIB}
     )
-    SET(FERN_ALGORITHM_CORE_LIBRARY
-        optimized ${FERN_ALGORITHM_CORE_LIBRARY}
-        debug ${FERN_ALGORITHM_CORE_DEBUG_LIBRARY}
+    set(FERN_ALGORITHM_LIBRARY
+        optimized ${FERN_ALGORITHM_LIBRARY}
+        debug ${FERN_ALGORITHM_DEBUG_LIBRARY}
     )
-ENDIF()
+endif()
 
 
-FIND_LIBRARY(FERN_ALGORITHM_POLICY_LIBRARY
-    NAMES fern_algorithm_policy
+find_library(FERN_FEATURE_LIBRARY
+    NAMES fern_feature
     PATHS ${_FERN_ROOT_LIB}
 )
-IF(WIN32)
-    FIND_LIBRARY(FERN_ALGORITHM_POLICY_DEBUG_LIBRARY
-        NAMES fern_algorithm_policyd
+if(WIN32)
+    find_library(FERN_FEATURE_DEBUG_LIBRARY
+        NAMES fern_featured
         PATHS ${_FERN_ROOT_LIB}
     )
-    SET(FERN_ALGORITHM_POLICY_LIBRARY
-        optimized ${FERN_ALGORITHM_POLICY_LIBRARY}
-        debug ${FERN_ALGORITHM_POLICY_DEBUG_LIBRARY}
+    set(FERN_FEATURE_LIBRARY
+        optimized ${FERN_FEATURE_LIBRARY}
+        debug ${FERN_FEATURE_DEBUG_LIBRARY}
     )
-ENDIF()
+endif()
 
 
-FIND_LIBRARY(FERN_FEATURE_CORE_LIBRARY
-    NAMES fern_feature_core
-    PATHS ${_FERN_ROOT_LIB}
-)
-IF(WIN32)
-    FIND_LIBRARY(FERN_FEATURE_CORE_DEBUG_LIBRARY
-        NAMES fern_feature_cored
-        PATHS ${_FERN_ROOT_LIB}
-    )
-    SET(FERN_FEATURE_CORE_LIBRARY
-        optimized ${FERN_FEATURE_CORE_LIBRARY}
-        debug ${FERN_FEATURE_CORE_DEBUG_LIBRARY}
-    )
-ENDIF()
-
-
-FIND_LIBRARY(FERN_CORE_LIBRARY
+find_library(FERN_CORE_LIBRARY
     NAMES fern_core
     PATHS ${_FERN_ROOT_LIB}
 )
-IF(WIN32)
-    FIND_LIBRARY(FERN_CORE_DEBUG_LIBRARY
+if(WIN32)
+    find_library(FERN_CORE_DEBUG_LIBRARY
         NAMES fern_cored
         PATHS ${_FERN_ROOT_LIB}
     )
-    SET(FERN_CORE_LIBRARY
+    set(FERN_CORE_LIBRARY
         optimized ${FERN_CORE_LIBRARY}
         debug ${FERN_CORE_DEBUG_LIBRARY}
     )
-ENDIF()
+endif()
 
 
-SET(FERN_LIBRARIES
-    ${FERN_ALGORITHM_CORE_LIBRARY}
-    ${FERN_ALGORITHM_POLICY_LIBRARY}
-    ${FERN_FEATURE_CORE_LIBRARY}
+set(FERN_LIBRARIES
+    ${FERN_ALGORITHM_LIBRARY}
+    ${FERN_FEATURE_LIBRARY}
     ${FERN_CORE_LIBRARY}
 )
 
 
-INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(Fern
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(Fern
     REQUIRED_VARS
         FERN_LIBRARIES
         FERN_INCLUDE_DIRS
 )
 
 
-MARK_AS_ADVANCED(
+mark_as_advanced(
     FERN_LIBRARIES
     FERN_INCLUDE_DIRS
 )
