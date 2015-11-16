@@ -165,6 +165,10 @@ endif()
 
 if(DEVBASE_FERN_REQUIRED)
     find_package(Fern REQUIRED)
+
+    if(NOT FERN_FOUND)
+        message(FATAL_ERROR "Fern not found")
+    endif()
 endif()
 
 
