@@ -212,6 +212,15 @@ if(DEVBASE_GEOS_REQUIRED)
 endif()
 
 
+if(DEVBASE_GRAPHVIZ_REQUIRED)
+    find_package(Graphviz REQUIRED)
+
+    if(GRAPHVIZ_FOUND)
+        include(DevBaseGraphvizMacro)
+    endif()
+endif()
+
+
 if(DEVBASE_HDF5_REQUIRED)
     list(REMOVE_DUPLICATES DEVBASE_REQUIRED_HDF5_COMPONENTS)
     find_package(HDF5 REQUIRED
@@ -333,6 +342,15 @@ if(DEVBASE_OPENGL_REQUIRED)
     list(APPEND DEVBASE_EXTERNAL_LIBRARIES
         ${OPENGL_LIBRARIES}
     )
+endif()
+
+
+if(DEVBASE_PANDOC_REQUIRED)
+    find_package(Pandoc REQUIRED)
+
+    if(PANDOC_FOUND)
+        include(DevBasePandocMacro)
+    endif()
 endif()
 
 

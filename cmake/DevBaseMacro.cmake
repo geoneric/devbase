@@ -425,8 +425,8 @@ function(add_object_library)
         LIBRARY)  # Library name the object library is part of.
     set(MULTI_VALUE_ARGUMENTS SOURCES)  # Source files.
 
-    cmake_parse_arguments(ADD_OBJECT_LIBRARY "${OPTIONS}" "${ONE_VALUE_ARGUMENTS}"
-        "${MULTI_VALUE_ARGUMENTS}" ${ARGN})
+    cmake_parse_arguments(ADD_OBJECT_LIBRARY "${OPTIONS}"
+        "${ONE_VALUE_ARGUMENTS}" "${MULTI_VALUE_ARGUMENTS}" ${ARGN})
 
     if(ADD_OBJECT_LIBRARY_UNPARSED_ARGUMENTS)
         message(FATAL_ERROR
