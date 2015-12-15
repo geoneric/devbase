@@ -281,6 +281,15 @@ if(DEVBASE_LIB_XSLT_REQUIRED)
 endif()
 
 
+if(DEVBASE_LINKCHECKER_REQUIRED)
+    find_package(Linkchecker REQUIRED)
+
+    if(LINKCHECKER_FOUND)
+        include(DevBaseLinkcheckerMacro)
+    endif()
+endif()
+
+
 if(DEVBASE_LOKI_REQUIRED)
     find_package(Loki REQUIRED)
 endif()

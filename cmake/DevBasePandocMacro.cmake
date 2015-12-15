@@ -1,6 +1,6 @@
-function(convert_markdown_to_html)
+function(convert_markdown)
     set(OPTIONS GITHUB_FLAVORED)
-    set(ONE_VALUE_ARGUMENTS TARGET)
+    set(ONE_VALUE_ARGUMENTS TARGET FORMAT DESTINATIONS)
     set(MULTI_VALUE_ARGUMENTS SOURCES)  # Markdown source files.
 
     cmake_parse_arguments(CONVERT_MARKDOWN "${OPTIONS}"
@@ -13,12 +13,19 @@ function(convert_markdown_to_html)
         )
     endif()
 
+    set(format ${CONVERT_MARKDOWN_FORMAT})
     set(target ${CONVERT_MARKDOWN_TARGET})
+    set(destinations ${CONVERT_MARKDOWN_DESTINATIONS})
     set(sources ${CONVERT_MARKDOWN_SOURCES})
 
     set(source_format "markdown")
     if(CONVERT_MARKDOWN_GITHUB_FLAVORED)
         set(source_format "${source_format}_github")
+    endif()
+
+    set(destination_format "html5")
+    if(CONVERT_MARKDOWN_FORMAT)
+        set(destination_format ${CONVERT_MARKDOWN_FORMAT})
     endif()
 
     foreach(source_filename ${sources})
@@ -36,21 +43,29 @@ function(convert_markdown_to_html)
         endif()
 
         set(source_pathname ${source_directory}/${source_name})
+        set(destination_extension ${destination_format})
+
+        if(destination_extension STREQUAL "html5")
+            set(destination_extension "html")
+        endif()
+
         set(destination_pathname
-            ${CMAKE_CURRENT_BINARY_DIR}/${source_name_we}.html)
+            ${CMAKE_CURRENT_BINARY_DIR}/${source_name_we}.${destination_extension})
 
         add_custom_command(
             OUTPUT ${destination_pathname}
             COMMAND ${PANDOC_EXECUTABLE}
                 --standalone
                 --from ${source_format}
-                --to html5
+                --to ${destination_format}
                 --output ${destination_pathname}
                 ${source_pathname}
             DEPENDS ${source_pathname}
         )
         list(APPEND destination_pathnames ${destination_pathname})
     endforeach()
+
+    set(${destinations} ${destination_pathnames} PARENT_SCOPE)
 
     add_custom_target(${CONVERT_MARKDOWN_TARGET}
         DEPENDS ${destination_pathnames})
