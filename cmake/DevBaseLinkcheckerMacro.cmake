@@ -36,7 +36,11 @@ function(check_for_broken_links)
 
         add_custom_command(
             OUTPUT ${destination_pathname}
-            COMMAND ${LINKCHECKER_EXECUTABLE} ${source_pathname}
+            COMMAND ${LINKCHECKER_EXECUTABLE}
+                # We are only interested in the links in the current file,
+                # not in the links in linked files.
+                --recursion-level=1
+                ${source_pathname}
             COMMAND ${CMAKE_COMMAND} -E touch ${destination_pathname}
             DEPENDS ${source_pathname}
         )
