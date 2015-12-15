@@ -1,6 +1,6 @@
 function(convert_dot)
     set(OPTIONS "")
-    set(ONE_VALUE_ARGUMENTS TARGET FORMAT)
+    set(ONE_VALUE_ARGUMENTS TARGET FORMAT DESTINATIONS)
     set(MULTI_VALUE_ARGUMENTS SOURCES)  # Dot source files.
 
     cmake_parse_arguments(CONVERT_DOT "${OPTIONS}"
@@ -14,6 +14,7 @@ function(convert_dot)
     endif()
 
     set(format ${CONVERT_DOT_FORMAT})
+    set(destinations ${CONVERT_DOT_DESTINATIONS})
     set(sources ${CONVERT_DOT_SOURCES})
 
     set(destination_format "svg")
@@ -50,6 +51,8 @@ function(convert_dot)
         )
         list(APPEND destination_pathnames ${destination_pathname})
     endforeach()
+
+    set(${destinations} ${destination_pathnames} PARENT_SCOPE)
 
     add_custom_target(${CONVERT_DOT_TARGET}
         DEPENDS ${destination_pathnames})
