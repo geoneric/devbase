@@ -298,7 +298,7 @@ macro(copy_python_unit_test_modules)
     endif()
 
     file(GLOB PYTHON_UNIT_TEST_MODULES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-        "*_test.py")
+        "*.py")
 
     foreach(MODULE ${PYTHON_UNIT_TEST_MODULES})
         set(PYTHON_UNIT_TEST_MODULE ${CMAKE_CURRENT_SOURCE_DIR}/${MODULE})
