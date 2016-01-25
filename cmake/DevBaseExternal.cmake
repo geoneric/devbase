@@ -1,3 +1,32 @@
+if(APPLE)
+    # Detect if the "port" command is valid on this system; if so, return
+    # full path.
+    execute_process(
+        COMMAND which port
+        RESULT_VARIABLE DETECT_MACPORTS
+        OUTPUT_VARIABLE MACPORTS_PREFIX
+        ERROR_QUIET
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    if(${DETECT_MACPORTS} EQUAL 0)
+        # /opt/local/bin/port -> /opt/local/bin -> /opt/local
+        get_filename_component(MACPORTS_PREFIX ${MACPORTS_PREFIX} DIRECTORY)
+        get_filename_component(MACPORTS_PREFIX ${MACPORTS_PREFIX} DIRECTORY)
+
+        set(CMAKE_PREFIX_PATH
+            ${MACPORTS_PREFIX}
+            ${CMAKE_PREFIX_PATH}
+        )
+
+        message(STATUS "Probing MacPorts installation in: ${MACPORTS_PREFIX}")
+    endif()
+
+
+    # TODO Also detect homebrew, using "brew --prefix"
+endif()
+
+
 # Peacock is a project for building external software. It can be used to
 # build the Boost libraries on all kinds of platform, for example. A
 # PEACOCK_PREFIX CMake variable or environment variable can be set to
@@ -5,7 +34,6 @@
 # current platform string to this prefix, we end up at the root of the
 # header files and libraries.
 # See also: https://github.com/geoneric/peacock
-
 if(peacock_compiler_found)
     # If the PEACOCK_PREFIX CMake variable is not set, but an environment
     # variable with that name is, then copy it to a CMake variable. This way
@@ -15,6 +43,8 @@ if(peacock_compiler_found)
     endif()
 
     if(PEACOCK_PREFIX)
+        # PEACOCK_PREFIX takes precedence over all other paths.
+
         # # if cross compiling:
         # set(CMAKE_FIND_ROOT_PATH
         #     ${PEACOCK_PREFIX}/${peacock_target_platform})
@@ -27,6 +57,10 @@ if(peacock_compiler_found)
         set(CMAKE_INCLUDE_DIRECTORIES_BEFORE TRUE)
     endif()
 endif()
+
+
+
+
 
 
 # Variable that can be set in this module:
@@ -112,21 +146,10 @@ if(DEVBASE_CURSES_REQUIRED)
     find_package(Curses REQUIRED)
     # Check CURSES_HAVE_NCURSES_H -> cursesw.h in .../include
     # Check CURSES_HAVE_NCURSES_NCURSES_H -> curses.h in .../ncursesw
-    # Simplify this, use CMAKE_INSTALL_PREFIX to point CMake to /opt/local.
-    if(NOT APPLE)
-        include_directories(
-            SYSTEM
-            ${CURSES_INCLUDE_DIRS}  # /ncursesw
-        )
-    else()
-        include_directories(
-            SYSTEM
-            /opt/local/include
-        )
-        link_directories(
-            /opt/local/lib
-        )
-    endif()
+    include_directories(
+        SYSTEM
+        ${CURSES_INCLUDE_DIRS}  # /ncursesw
+    )
 
     if(NOT DEFINED DEVBASE_CURSES_WIDE_CHARACTER_SUPPORT_REQUIRED)
         set(DEVBASE_CURSES_WIDE_CHARACTER_SUPPORT_REQUIRED TRUE)
@@ -383,6 +406,7 @@ if(DEVBASE_PCRASTER_RASTER_FORMAT_REQUIRED)
 endif()
 
 
+# This one first, before FindPythonLibs. See CMake docs.
 if(DEVBASE_PYTHON_INTERP_REQUIRED)
     if(DEFINED DEVBASE_REQUIRED_PYTHON_VERSION)
         set(Python_ADDITIONAL_VERSIONS ${DEVBASE_REQUIRED_PYTHON_VERSION})
