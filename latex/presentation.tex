@@ -1,0 +1,66 @@
+\input{packages.tex}
+
+\usepackage{color}
+\usepackage{listings}
+
+% http://www.hartwork.org/beamer-theme-matrix/
+\usetheme{default}
+\usecolortheme{dove}
+
+% \useoutertheme{infolines}
+% \useoutertheme{split}
+% \setbeamertemplate{footline}[frame number]
+
+% Default footer. Override in .tex if necessary.
+\setbeamertemplate{footline}[text line]{%
+    \parbox{\linewidth}{\vspace*{-8pt}\insertshorttitle\hfill\insertframenumber/\inserttotalframenumber}
+}
+
+
+% Get rid of nativation symbols in the footer of each page.
+\setbeamertemplate{navigation symbols}{}
+
+\definecolor{comment_color}{rgb}{0,0.6,0}
+\definecolor{identifier_color}{rgb}{0,0,0.6}
+\definecolor{keyword_color}{rgb}{0.6,0.6,0}
+\definecolor{number_color}{rgb}{0.6,0,0}
+\definecolor{string_color}{rgb}{0.6,0,0}
+
+\lstdefinestyle{python_style}{
+    language=Python,
+    % numbers=left,
+    basicstyle=\scriptsize\ttfamily,
+    % basicstyle=\ttfamily,
+    commentstyle=\itshape\color{comment_color},
+    identifierstyle=\color{identifier_color},
+    keywordstyle=\color{keyword_color},
+    numberstyle=\color{number_color},
+    stringstyle=\color{string_color},
+    frame=single,
+}
+
+\lstdefinestyle{java_style}{
+    language=Java,
+    % numbers=left,
+    basicstyle=\scriptsize\ttfamily,
+    % basicstyle=\ttfamily,
+    commentstyle=\itshape\color{comment_color},
+    identifierstyle=\color{identifier_color},
+    keywordstyle=\color{keyword_color},
+    numberstyle=\color{number_color},
+    stringstyle=\color{string_color},
+    frame=single,
+}
+
+\lstdefinestyle{cpp_style}{
+    language=C++,
+    basicstyle=\scriptsize\ttfamily,
+    commentstyle=\itshape\color{comment_color},
+    identifierstyle=\color{identifier_color},
+    keywordstyle=\color{keyword_color},
+    numberstyle=\color{number_color},
+    stringstyle=\color{string_color},
+    frame=single,
+}
+
+\lstset{style=python_style}

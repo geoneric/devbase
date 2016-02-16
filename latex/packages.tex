@@ -1,0 +1,46 @@
+% Stuff relevant for all documents.
+
+% Make sure your document is saved using the UTF-8 encoding!
+% In your own text you may first want to add these:
+% \usepackage[dutch]{babel}
+
+\usepackage[utf8]{inputenc}
+
+% http://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc
+\usepackage[T1]{fontenc}
+
+
+% We assume that you need support for writing formulas.
+% mathtools fixes some amsmath quirks and adds some useful settings, symbols,
+% and environments to amsmath. mathtools loads amsmath.
+\usepackage{mathtools}
+% \usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+% Enhanced versions of the computer modern fonts.
+\usepackage{lmodern}
+
+% Enhance appearance and readability of the document.
+\usepackage[babel=true]{microtype}
+
+\usepackage{eurosym}
+\DeclareUnicodeCharacter{20AC}{\euro}
+
+\usepackage{todonotes}
+
+\usepackage{graphics}
+
+% \usepackage[
+% %  draft,
+%   % colorlinks=true,
+%   % linkcolor=linkcolour, % ref figures
+%   % urlcolor=linkcolour, % 
+%   % citecolor=linkcolour,
+%   pdfborder={0 0 0},
+% ]{hyperref}
+
+% Don't use fancyhdr with KOMA, use scrpage2.
+\usepackage{scrpage2}
+
+\usepackage{listings}
