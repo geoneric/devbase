@@ -165,6 +165,21 @@ if(DEVBASE_CURSES_REQUIRED)
 endif()
 
 
+if(DEVBASE_DOCOPT_REQUIRED)
+    find_package(Docopt REQUIRED)
+
+    message(${DOCOPT_INCLUDE_DIRS})
+
+    include_directories(
+        SYSTEM
+        ${DOCOPT_INCLUDE_DIRS}
+    )
+    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
+        ${DOCOPT_LIBRARIES}
+    )
+endif()
+
+
 if(DEVBASE_DOXYGEN_REQUIRED)
     find_package(Doxygen REQUIRED)
 
