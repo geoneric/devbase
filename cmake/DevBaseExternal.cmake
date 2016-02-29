@@ -210,10 +210,10 @@ if(DEVBASE_FERN_REQUIRED)
 endif()
 
 
-if(DEVBASE_GDAL_REQUIRED)
-    find_package(GDAL REQUIRED)
+if(DEVBASE_GDAL_USEFUL OR DEVBASE_GDAL_REQUIRED)
+    find_package(GDAL)
 
-    if(NOT GDAL_FOUND)
+    if(DEVBASE_GDAL_REQUIRED AND NOT GDAL_FOUND)
         message(FATAL_ERROR "GDAL not found")
     endif()
 
