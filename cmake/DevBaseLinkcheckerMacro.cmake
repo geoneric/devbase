@@ -1,7 +1,7 @@
 # Check links in html files.
 function(check_for_broken_links)
     set(OPTIONS "")
-    set(ONE_VALUE_ARGUMENTS TARGET)
+    set(ONE_VALUE_ARGUMENTS TARGET CONFIGURATION_FILE)
     set(MULTI_VALUE_ARGUMENTS IGNORE_URLS SOURCES)  # Html source files.
 
     cmake_parse_arguments(CHECK_LINKS "${OPTIONS}"
@@ -19,6 +19,11 @@ function(check_for_broken_links)
     foreach(url_regex ${CHECK_LINKS_IGNORE_URLS})
         list(APPEND ignore_urls_option "--ignore-url=${url_regex}")
     endforeach()
+
+    if(CHECK_LINKS_CONFIGURATION_FILE)
+        set(configuration_file_option
+            "--config=${CHECK_LINKS_CONFIGURATION_FILE}")
+    endif()
 
     foreach(source_filename ${sources})
         get_filename_component(source_directory ${source_filename} DIRECTORY)
@@ -44,6 +49,8 @@ function(check_for_broken_links)
                 # We are only interested in the links in the current file,
                 # not in the links in linked files.
                 --recursion-level=1
+                --no-status
+                ${configuration_file_option}
                 ${ignore_urls_option}
                 ${source_pathname}
             VERBATIM
