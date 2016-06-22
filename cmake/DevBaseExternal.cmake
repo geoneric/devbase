@@ -207,6 +207,14 @@ if(DEVBASE_FERN_REQUIRED)
     if(NOT FERN_FOUND)
         message(FATAL_ERROR "Fern not found")
     endif()
+
+    include_directories(
+        SYSTEM
+        ${FERN_INCLUDE_DIRS}
+    )
+    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
+        ${FERN_LIBRARIES}
+    )
 endif()
 
 
