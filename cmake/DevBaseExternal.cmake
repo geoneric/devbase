@@ -429,6 +429,19 @@ if(DEVBASE_PCRASTER_RASTER_FORMAT_REQUIRED)
 endif()
 
 
+if(DEVBASE_PYBIND11_REQUIRED)
+    find_package(Pybind11 REQUIRED)
+
+    if(NOT PYBIND11_FOUND)
+        message(FATAL_ERROR "pybind11 library not found")
+    endif()
+
+    include_directories(
+        ${PYBIND11_INCLUDE_DIRS}
+    )
+endif()
+
+
 # This one first, before FindPythonLibs. See CMake docs.
 if(DEVBASE_PYTHON_INTERP_REQUIRED)
     if(DEFINED DEVBASE_REQUIRED_PYTHON_VERSION)
