@@ -6,6 +6,7 @@ import shlex
 import subprocess
 import sys
 import docopt
+sys.path = [os.path.join(os.path.dirname(__file__), "..", "source")] + sys.path
 import devbase
 
 
