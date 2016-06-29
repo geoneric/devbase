@@ -124,6 +124,7 @@ def configure_vagrant_box(
     vagrant_configuration = """\
 Vagrant.configure(2) do |config|
     config.vm.box = "{box_name}"
+    config.vm.synced_folder ".", "/shared"
 
     config.vm.provider "virtualbox" do |virtual_box|
         # virtual_box.name = "{box_name}"  # TODO Not unique
