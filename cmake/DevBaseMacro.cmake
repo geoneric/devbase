@@ -283,7 +283,7 @@ endfunction()
 # test modules will always be up to date before building the other target.
 # TARGET: Name of custom target to add.
 macro(copy_python_unit_test_modules)
-    set(OPTIONS "")
+    set(OPTIONS RECURSE)
     set(ONE_VALUE_ARGUMENTS TARGET)
     set(MULTI_VALUE_ARGUMENTS "")
 
@@ -297,8 +297,13 @@ macro(copy_python_unit_test_modules)
         )
     endif()
 
-    file(GLOB PYTHON_UNIT_TEST_MODULES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-        "*.py")
+    if(COPY_MODULES_RECURSE)
+        file(GLOB_RECURSE PYTHON_UNIT_TEST_MODULES RELATIVE
+            ${CMAKE_CURRENT_SOURCE_DIR} "*.py")
+    else()
+        file(GLOB PYTHON_UNIT_TEST_MODULES RELATIVE
+            ${CMAKE_CURRENT_SOURCE_DIR} "*.py")
+    endif()
 
     foreach(MODULE ${PYTHON_UNIT_TEST_MODULES})
         set(PYTHON_UNIT_TEST_MODULE ${CMAKE_CURRENT_SOURCE_DIR}/${MODULE})
