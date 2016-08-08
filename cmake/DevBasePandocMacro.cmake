@@ -1,3 +1,9 @@
+# TODO
+# convert_latex
+#
+# e.g.: latex to word:
+#     pandoc article.tex -o article.docx --bibliography bibliography.bib
+
 function(convert_markdown)
     set(OPTIONS GITHUB_FLAVORED)
     set(ONE_VALUE_ARGUMENTS TARGET FORMAT DESTINATIONS)
