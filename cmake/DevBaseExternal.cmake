@@ -132,8 +132,6 @@ endif()
 if(DEVBASE_DOCOPT_REQUIRED)
     find_package(Docopt REQUIRED)
 
-    message(${DOCOPT_INCLUDE_DIRS})
-
     include_directories(
         SYSTEM
         ${DOCOPT_INCLUDE_DIRS}
