@@ -490,6 +490,10 @@ endif()
 if(DEVBASE_SPHINX_REQUIRED)
     # TODO Find Sphinx Python package.
     include(SphinxDoc)
+
+    if(NOT SPHINX_BUILD_EXECUTABLE OR NOT SPHINX_APIDOC_EXECUTABLE)
+        message(FATAL_ERROR "sphinx not found")
+    endif()
 endif()
 
 
