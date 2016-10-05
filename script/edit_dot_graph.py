@@ -33,7 +33,7 @@ def add_attribute(
         attribute_name,
         attribute_value):
 
-    graph = file(graph_name, "r").read()
+    graph = open(graph_name, "r").read()
     snippet = "{attribute}={value}".format(
         attribute=attribute_name,
         value=attribute_value)
@@ -56,7 +56,7 @@ def add_attribute(
         raise RuntimeError("node '{}' was found multiple times".format(
             node_name))
 
-    stream = sys.stdout if output_name is None else file(output_name, "w")
+    stream = sys.stdout if output_name is None else open(output_name, "w")
 
     stream.write(graph)
 
