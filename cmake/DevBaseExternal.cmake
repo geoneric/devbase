@@ -454,7 +454,17 @@ if(DEVBASE_QT_REQUIRED)
         ### # Instruct CMake to run moc automatically when needed.
         ### set(CMAKE_AUTOMOC ON)
 
-        find_package(Qt5Widgets REQUIRED)
+        list(REMOVE_DUPLICATES DEVBASE_REQUIRED_QT_COMPONENTS)
+        find_package(Qt5 REQUIRED COMPONENTS ${DEVBASE_REQUIRED_QT_COMPONENTS})
+
+        foreach(component ${DEVBASE_REQUIRED_QT_COMPONENTS})
+            if(NOT Qt5${component}_FOUND)
+                message(FATAL_ERROR "Qt5${component} not found")
+            endif()
+            message(STATUS "Found Qt5${component}: ${Qt5${component}_VERSION}")
+            message(STATUS "  includes : ${Qt5${component}_INCLUDE_DIRS}")
+            message(STATUS "  libraries: ${Qt5${component}_LIBRARIES}")
+        endforeach()
     endif()
 endif()
 
@@ -469,7 +479,7 @@ if(DEVBASE_QWT_REQUIRED)
     list(APPEND DEVBASE_EXTERNAL_LIBRARIES
         ${QWT_LIBRARY}
     )
-    message(STATUS "Found Qwt: ${Boost_INCLUDE_DIRS}")
+    message(STATUS "Found Qwt:")
     message(STATUS "  includes : ${QWT_INCLUDE_DIRS}")
     message(STATUS "  libraries: ${QWT_LIBRARIES}")
 endif()
