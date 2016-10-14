@@ -22,7 +22,7 @@ Options:
     --version               Show version
     --prefix=<directory>    Directory to store results (default: current dir)
     --cpus=<amount>         Number of CPUs to allocate for virtual machines
-    --memory=<amount>       Amount of memory to allocate for virtual machines
+    --memory=<amount>       Amount of MB to allocate for virtual machines
     configuration           Pathname of file containing configuration
 
 The prefix directory will be used to store directories and files. It
