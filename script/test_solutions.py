@@ -8,6 +8,7 @@ import sys
 import docopt
 sys.path = [os.path.join(os.path.dirname(__file__), "..", "source")] + sys.path
 import devbase
+from devbase.json import json_minify
 
 
 doc_string = """\
@@ -351,6 +352,7 @@ def test_solutions(
         configuration_pathname):
 
     configuration = open(configuration_pathname).read()
+    configuration = json_minify(configuration)
     configuration = json.loads(configuration)
     solutions = configuration["solutions"]
     box_names = [solution["box"] for solution in solutions]
