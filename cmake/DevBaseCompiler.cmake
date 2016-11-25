@@ -115,8 +115,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
         "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -Wno-unused-parameter"
     )
 
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
-
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -U_FORTIFY_SOURCE")
 
     # Make linker report any unresolved symbols.
@@ -128,8 +126,6 @@ endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     # Handle case where C++ compiler is gcc and not clang.
 
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -U_FORTIFY_SOURCE")
 
     # Make linker report any unresolved symbols.
@@ -138,8 +134,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     # Handle case where C++ compiler is clang and not gcc.
-
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
     check_cxx_compiler_flag("-Wno-vla-extension"
         CXX_SUPPORTS_NO_VLA_EXTENSION)
