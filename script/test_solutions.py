@@ -8,6 +8,7 @@ import sys
 import docopt
 sys.path = [os.path.join(os.path.dirname(__file__), "..", "source")] + sys.path
 import devbase
+from devbase.json import json_minify
 
 
 doc_string = """\
@@ -22,7 +23,7 @@ Options:
     --version               Show version
     --prefix=<directory>    Directory to store results (default: current dir)
     --cpus=<amount>         Number of CPUs to allocate for virtual machines
-    --memory=<amount>       Amount of memory to allocate for virtual machines
+    --memory=<amount>       Amount of MB to allocate for virtual machines
     configuration           Pathname of file containing configuration
 
 The prefix directory will be used to store directories and files. It
@@ -351,6 +352,7 @@ def test_solutions(
         configuration_pathname):
 
     configuration = open(configuration_pathname).read()
+    configuration = json_minify(configuration)
     configuration = json.loads(configuration)
     solutions = configuration["solutions"]
     box_names = [solution["box"] for solution in solutions]

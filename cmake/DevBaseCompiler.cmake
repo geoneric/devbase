@@ -46,6 +46,8 @@ include(CheckCXXCompilerFlag)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
         CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    # Handle case where C++ compiler is gcc or clang.
+
     # TODO Figure this out:
     # https://gcc.gnu.org/wiki/Visibility
 
@@ -62,9 +64,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
     # TODO Maybe add:
     # -Wconversion
     # -Wsign-conversion
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -Wno-unused-parameter -Wfloat-equal"
-    )
     set(CMAKE_CXX_FLAGS
         "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -ftemplate-backtrace-limit=0 -Wfloat-equal"
     )
@@ -100,13 +99,21 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
             endif()
         endif()
     endif()
+
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    # Handle case where C++ compiler is msvc.
+
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_SCL_SECURE_NO_WARNINGS /wd4101")
+
 endif()
 
 
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+    # Handle case where C compiler is gcc and not clang.
+
+    set(CMAKE_C_FLAGS
+        "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -Wno-unused-parameter"
+    )
 
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -U_FORTIFY_SOURCE")
 
@@ -117,15 +124,23 @@ endif()
 
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+    # Handle case where C++ compiler is gcc and not clang.
 
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -U_FORTIFY_SOURCE")
 
     # Make linker report any unresolved symbols.
     set(CMAKE_SHARED_LINKER_FLAGS
         "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
+
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+    # Handle case where C++ compiler is clang and not gcc.
+
+    check_cxx_compiler_flag("-Wno-vla-extension"
+        CXX_SUPPORTS_NO_VLA_EXTENSION)
+
+    if (CXX_SUPPORTS_NO_VLA_EXTENSION)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-vla-extension")
+    endif ()
 endif()
 
 
