@@ -472,6 +472,10 @@ endif()
 if(DEVBASE_QWT_REQUIRED)
     find_package(Qwt REQUIRED)
 
+    if(NOT QWT_FOUND)
+        message(FATAL_ERROR "Qwt not found")
+    endif()
+
     include_directories(
         SYSTEM
         ${QWT_INCLUDE_DIR}
