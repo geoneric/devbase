@@ -63,10 +63,10 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
     # -Wconversion
     # -Wsign-conversion
     set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -Wno-unused-parameter"
+        "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -Wno-unused-parameter -Wfloat-equal"
     )
     set(CMAKE_CXX_FLAGS
-        "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -ftemplate-backtrace-limit=0"
+        "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -ftemplate-backtrace-limit=0 -Wfloat-equal"
     )
 
     # This results in an error on mingw/gcc 4.8/windows. Some warning about
