@@ -22,7 +22,7 @@ Options:
     attribute_name   Name of attribute
     attribute_value  Value of attribute
 """.format(
-    command = os.path.basename(sys.argv[0]))
+    command=os.path.basename(sys.argv[0]))
 
 
 @devbase.checked_call
@@ -39,14 +39,12 @@ def add_attribute(
         value=attribute_value)
     pattern = r"^\s*{node}\s*\[".format(node=node_name)
 
-
     def update_node(
             match_object):
         return "{match}\n{indent}{attribute}".format(
             match=match_object.group(0),
             indent=8 * " ",
             attribute=snippet)
-
 
     graph, nr_subs = re.subn(pattern, update_node, graph, flags=re.MULTILINE)
 
@@ -73,7 +71,9 @@ if __name__ == "__main__":
             attribute_name = arguments["<attribute_name>"]
             attribute_value = arguments["<attribute_value>"]
             function = add_attribute
-            arguments = (graph_name, output_name, node_name, attribute_name,
-                attribute_value)
+            arguments = (
+                graph_name, output_name, node_name, attribute_name,
+                attribute_value
+            )
 
     sys.exit(function(*arguments))

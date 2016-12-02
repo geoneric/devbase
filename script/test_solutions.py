@@ -29,7 +29,7 @@ Options:
 The prefix directory will be used to store directories and files. It
 is probably a good idea if this directory is empty.
 """.format(
-        command = os.path.basename(sys.argv[0]))
+    command=os.path.basename(sys.argv[0]))
 
 
 def log_debug(
@@ -66,10 +66,11 @@ def execute_command(
 
     try:
         log_debug(logger, "execute: {}".format(command))
-        messages = subprocess.check_output(shlex.split(command),
-            stderr=subprocess.STDOUT, universal_newlines=True)
+        messages = subprocess.check_output(
+            shlex.split(command), stderr=subprocess.STDOUT,
+            universal_newlines=True)
         log_debug(logger, messages)
-    except subprocess.CalledProcessError, exception:
+    except subprocess.CalledProcessError as exception:
         log_error(logger, exception.output)
         raise
 
@@ -79,8 +80,8 @@ def execute_command(
 def box_name_to_filename(
         box_name):
 
-    return "".join(c if (c.isalnum() or c in "._- ") else "_"
-        for c in box_name)
+    return "".join(
+        c if (c.isalnum() or c in "._- ") else "_" for c in box_name)
 
 
 def vagrant_box_exists(
@@ -150,11 +151,11 @@ Vagrant.configure(2) do |config|
     {provisions}
 end
 """.format(
-            box_name=box_name,
-            nr_cpus=nr_cpus,
-            amount_of_memory=amount_of_memory,
-            provisions="\n    ".join(provisions)
-        )
+        box_name=box_name,
+        nr_cpus=nr_cpus,
+        amount_of_memory=amount_of_memory,
+        provisions="\n    ".join(provisions)
+    )
 
     file("Vagrantfile", "w").write(vagrant_configuration)
 
@@ -172,8 +173,8 @@ def create_vagrant_box(
         add_vagrant_box(logger, box_name)
 
     initialize_vagrant_box(logger, box_name)
-    configure_vagrant_box(logger, box_name, nr_cpus, amount_of_memory,
-        provisions)
+    configure_vagrant_box(
+        logger, box_name, nr_cpus, amount_of_memory, provisions)
 
 
 def start_vagrant_box(
@@ -253,8 +254,8 @@ def test_solution(
 
     try:
 
-        create_vagrant_box(logger, box_name, nr_cpus, amount_of_memory,
-            provisions)
+        create_vagrant_box(
+            logger, box_name, nr_cpus, amount_of_memory, provisions)
 
         try:
 
@@ -273,7 +274,7 @@ def test_solution(
 
             status = 0
 
-        except subprocess.CalledProcessError, exception:
+        except subprocess.CalledProcessError as exception:
 
             # Log the exception to the screen. The command's output is
             # already logged (to the file and to the screen).
@@ -284,7 +285,7 @@ def test_solution(
             # Something went wrong: keep the virtual machine for inspection.
             suspend_vagrant_box(logger)
 
-    except Exception, exception:
+    except Exception as exception:
 
         # If we ever end up here, we must fix the script.
         log_critical(logger, "uncaught exception: {}".format(exception))
@@ -339,8 +340,8 @@ def setup_loggers(
     setup_logger("screen", level=logging.INFO)
 
     for box_name in box_names:
-        logger_pathname = "{}.log".format(os.path.join(prefix_pathname,
-            box_name_to_filename(box_name)))
+        logger_pathname = "{}.log".format(
+            os.path.join(prefix_pathname, box_name_to_filename(box_name)))
         setup_logger(box_name, logger_pathname, logging.DEBUG)
 
 
@@ -363,8 +364,8 @@ def test_solutions(
     failures = []
 
     for solution in solutions:
-        failures.append(test_solution(prefix_pathname, nr_cpus,
-            amount_of_memory, solution) != 0)
+        failures.append(test_solution(
+            prefix_pathname, nr_cpus, amount_of_memory, solution) != 0)
 
     if not any(failures):
         logging.getLogger("screen").info("All solutions succeeded")
@@ -404,5 +405,5 @@ if __name__ == "__main__":
 
     configuration_pathname = arguments["<configuration>"]
 
-    sys.exit(test_solutions(prefix, nr_cpus, amount_of_memory,
-        configuration_pathname))
+    sys.exit(test_solutions(
+        prefix, nr_cpus, amount_of_memory, configuration_pathname))
