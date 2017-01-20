@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os
 import sys
 import docopt
@@ -28,14 +29,15 @@ identified by comparing the file extension to (.py, .py.in)
 
 
 def find_python_modules(
-        directory_name):
+        root_directory_name):
 
     module_pathnames = []
 
-    for _, _, pathnames in os.walk(directory_name):
-        for pathname in pathnames:
-            if os.path.splitext(pathname)[1] in [".py", ".py.in"]:
-                module_pathnames.append(pathname)
+    for directory_pathname, _, filenames in os.walk(root_directory_name):
+        for filename in filenames:
+            if os.path.splitext(filename)[1] in [".py", ".py.in"]:
+                module_pathnames.append(os.path.join(directory_pathname,
+                    filename))
 
     return module_pathnames
 
