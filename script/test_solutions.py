@@ -234,6 +234,15 @@ def destroy_vagrant_box(
     execute_command(logger, command)
 
 
+def update_vagrant_box(
+        logger,
+        box_name):
+
+    command = "vagrant box update --box {}".format(box_name)
+    log_info(logger, "update vagrant box")
+    execute_command(logger, command)
+
+
 def test_solution(
         prefix_pathname,
         nr_cpus,
@@ -254,6 +263,7 @@ def test_solution(
 
     try:
 
+        update_vagrant_box(logger, box_name)
         create_vagrant_box(
             logger, box_name, nr_cpus, amount_of_memory, provisions)
 
@@ -372,7 +382,7 @@ def test_solutions(
     else:
         logging.getLogger("screen").error("The folowing solutions failed:")
 
-        for i in xrange(len(failures)):
+        for i in range(len(failures)):
             if failures[i]:
                 logging.getLogger("screen").error("    {}".format(
                     solutions[i]["label"]))
