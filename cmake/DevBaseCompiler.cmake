@@ -112,7 +112,9 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
     # Handle case where C compiler is gcc and not clang.
 
     set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -Wno-unused-parameter"
+        "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow"
+        # If you need this, add it to your project's CMakeLists.txt.
+        # -Wno-unused-parameter"
     )
 
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -U_FORTIFY_SOURCE")
