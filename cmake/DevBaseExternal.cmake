@@ -410,6 +410,7 @@ if(DEVBASE_PYBIND11_REQUIRED)
     endif()
 
     include_directories(
+        SYSTEM
         ${PYBIND11_INCLUDE_DIRS}
     )
 endif()
