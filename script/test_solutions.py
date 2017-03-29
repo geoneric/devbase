@@ -125,6 +125,7 @@ def configure_vagrant_box(
     # Replace the default Vagrant configuration file with a new one.
     vagrant_configuration = """\
 Vagrant.configure(2) do |config|
+    config.ssh.keep_alive = true
     config.vm.box = "{box_name}"
     config.vm.synced_folder ".", "/shared"
 
@@ -157,7 +158,7 @@ end
         provisions="\n    ".join(provisions)
     )
 
-    file("Vagrantfile", "w").write(vagrant_configuration)
+    open("Vagrantfile", "w").write(vagrant_configuration)
 
     # TODO Add provisions to the VagrantFile
 
@@ -405,7 +406,7 @@ if __name__ == "__main__":
 
     nr_cpus = 2
     if arguments["--cpus"] is not None:
-        nr_cpus = arguments["--cpus"]
+        nr_cpus = int(arguments["--cpus"])
         assert nr_cpus > 0, nr_cpus
 
     amount_of_memory = 4096
