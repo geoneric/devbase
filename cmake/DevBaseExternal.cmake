@@ -247,17 +247,28 @@ if(DEVBASE_HDF5_REQUIRED)
 endif()
 
 
-if(DEVBASE_HPX_REQUIRED)
-    # TODO Set HPX_DIR to dir containing HPXConfig.cmake.
+if(DEVBASE_HPX_USEFUL OR DEVBASE_HPX_REQUIRED)
+    # http://stellar.cct.lsu.edu/files/hpx-0.9.99/html/hpx/manual/build_system/using_hpx/using_hpx_cmake.html
     # See lib/cmake/hpx/HPXTargets.cmake for names of HPX targets to link
     # against.
 
-    # HPX updates CMAKE_CXX_FLAGS (adds -std=c++11, see HPXConfig.cmake).
-    # We want to do this ourselves.
-    set(_flags ${CMAKE_CXX_FLAGS})
-    find_package(HPX REQUIRED)
-    set(CMAKE_CXX_FLAGS ${_flags})
-    include_directories(${HPX_INCLUDE_DIRS})
+    if(DEVBASE_HPX_REQUIRED)
+        find_package(HPX REQUIRED)
+    else()
+        find_package(HPX)
+
+        if(NOT HPX_FOUND)
+            message(STATUS "Could not find HPX")
+        endif()
+    endif()
+
+    if(HPX_FOUND)
+        message(STATUS "Found HPX")
+        message(STATUS "  includes : ${HPX_INCLUDE_DIRS}")
+        message(STATUS "  libraries: ${HPX_LIBRARIES}")
+
+        include_directories(${HPX_INCLUDE_DIRS})
+    endif()
 endif()
 
 
