@@ -84,6 +84,13 @@ def box_name_to_filename(
         c if (c.isalnum() or c in "._- ") else "_" for c in box_name)
 
 
+def unique_box_directory_name(
+        box_name,
+        idx):
+
+    return "{}-{}".format(box_name_to_filename(box_name), idx)
+
+
 def vagrant_box_exists(
         logger,
         box_name):
@@ -248,7 +255,8 @@ def test_solution(
         prefix_pathname,
         nr_cpus,
         amount_of_memory,
-        solution):
+        solution,
+        idx):
     label = solution["label"]
     box_name = solution["box"]
     provisions = solution["provisions"]
@@ -259,7 +267,8 @@ def test_solution(
     log_debug(logger, json.dumps(solution))
 
     cwd = os.getcwd()
-    os.chdir(os.path.join(prefix_pathname, box_name_to_filename(box_name)))
+    os.chdir(os.path.join(prefix_pathname, unique_box_directory_name(
+        box_name, idx)))
     status = 1
 
     try:
@@ -319,9 +328,10 @@ def initialize_prefix(
     """
     assert os.path.exists(prefix_pathname)
 
-    for box_name in box_names:
-        os.mkdir(os.path.join(prefix_pathname, box_name_to_filename(
-            box_name)))
+    for idx in range(len(box_names)):
+        box_name = box_names[idx]
+        os.mkdir(os.path.join(prefix_pathname, unique_box_directory_name(
+            box_name, idx)))
 
 
 def setup_logger(
@@ -350,9 +360,11 @@ def setup_loggers(
 
     setup_logger("screen", level=logging.INFO)
 
-    for box_name in box_names:
+    for idx in range(len(box_names)):
+        box_name = box_names[idx]
         logger_pathname = "{}.log".format(
-            os.path.join(prefix_pathname, box_name_to_filename(box_name)))
+            os.path.join(prefix_pathname, unique_box_directory_name(
+                box_name, idx)))
         setup_logger(box_name, logger_pathname, logging.DEBUG)
 
 
@@ -374,9 +386,10 @@ def test_solutions(
 
     failures = []
 
-    for solution in solutions:
+    for idx in range(len(solutions)):
+        solution = solutions[idx]
         failures.append(test_solution(
-            prefix_pathname, nr_cpus, amount_of_memory, solution) != 0)
+            prefix_pathname, nr_cpus, amount_of_memory, solution, idx) != 0)
 
     if not any(failures):
         logging.getLogger("screen").info("All solutions succeeded")
