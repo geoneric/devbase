@@ -309,6 +309,22 @@ if(DEVBASE_LINKCHECKER_REQUIRED)
 endif()
 
 
+if(DEVBASE_NLOHMANN_JSON_REQUIRED)
+    find_package(nlohmann_json REQUIRED)
+
+    if(NOT nlohmann_json_FOUND)
+        message(FATAL_ERROR "nlohmann json not found")
+    endif()
+
+    message(STATUS "Found nlohmann json: ${JSON_INCLUDE_DIR}")
+
+    include_directories(
+        SYSTEM
+        ${JSON_INCLUDE_DIR}
+    )
+endif()
+
+
 if(DEVBASE_LOKI_REQUIRED)
     find_package(Loki REQUIRED)
 endif()
