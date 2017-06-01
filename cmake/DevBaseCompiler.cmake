@@ -162,11 +162,11 @@ if(peacock_compiler_found)
     # If the PEACOCK_PREFIX CMake variable is not set, but an environment
     # variable with that name is, then copy it to a CMake variable. This way
     # the CMake variable takes precedence.
-    if((NOT PEACOCK_PREFIX) AND (DEFINED ENV{PEACOCK_PREFIX}))
+    if((NOT DEFINED PEACOCK_PREFIX) AND (DEFINED ENV{PEACOCK_PREFIX}))
         set(PEACOCK_PREFIX $ENV{PEACOCK_PREFIX})
     endif()
 
-    if(PEACOCK_PREFIX)
+    if((DEFINED PEACOCK_PREFIX) AND PEACOCK_PREFIX)
         # PEACOCK_PREFIX takes precedence over all other paths.
 
         # # if cross compiling:
