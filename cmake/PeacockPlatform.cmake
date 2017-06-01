@@ -84,12 +84,15 @@ if(peacock_compiler_found)
         set(peacock_compiler_id "msvc")
     elseif(peacock_compiler_id STREQUAL "Clang")
         set(peacock_compiler_id "clang")
+    elseif(peacock_compiler_id STREQUAL "Intel")
+        set(peacock_compiler_id "intel")
     else()
-        message(FATAL_ERROR "Add compiler id")
+        message(FATAL_ERROR "Add compiler id for ${peacock_compiler_id}")
     endif()
 
 
-    if((peacock_compiler_id STREQUAL "gcc") OR (peacock_compiler_id STREQUAL "mingw") OR
+    if((peacock_compiler_id STREQUAL "gcc") OR 
+            (peacock_compiler_id STREQUAL "mingw") OR
             (peacock_compiler_id STREQUAL "clang"))
         string(FIND ${peacock_compiler_version} "." period_index)
         string(SUBSTRING ${peacock_compiler_version} 0 ${period_index}
@@ -103,6 +106,11 @@ if(peacock_compiler_found)
             set(peacock_compiler_version "14")
             set(peacock_compiler_main_version "14")
         endif()
+    elseif(peacock_compiler_id STREQUAL "intel")
+        # e.g.: 17.0.4.20170411
+        string(FIND ${peacock_compiler_version} "." period_index)
+        string(SUBSTRING ${peacock_compiler_version} 0 ${period_index}
+            peacock_compiler_main_version)
     endif()
 
 
@@ -153,8 +161,11 @@ if(peacock_compiler_found)
                 set(peacock_gnu_configure_host "x86_64-unknown-linux")
             elseif(peacock_compiler_id STREQUAL "clang")
                 set(peacock_gnu_configure_host "x86_64-unknown-linux")
+            elseif(peacock_compiler_id STREQUAL "intel")
+                set(peacock_gnu_configure_host "x86_64-unknown-linux")
             else()
-                message(FATAL_ERROR "Add GNU configure host")
+                message(FATAL_ERROR
+                    "Add GNU configure host for $peacock_compiler_id")
             endif()
         elseif(target_system_name STREQUAL "darwin")
             if(peacock_compiler_id STREQUAL "gcc")
