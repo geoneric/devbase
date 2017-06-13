@@ -267,7 +267,10 @@ if(DEVBASE_HPX_USEFUL OR DEVBASE_HPX_REQUIRED)
         message(STATUS "  includes : ${HPX_INCLUDE_DIRS}")
         message(STATUS "  libraries: ${HPX_LIBRARIES}")
 
-        include_directories(${HPX_INCLUDE_DIRS})
+        include_directories(
+            SYSTEM
+            ${HPX_INCLUDE_DIRS}
+        )
 
         # Check whether we are using the same build type as HPX
         if (NOT "${HPX_BUILD_TYPE}" STREQUAL "${CMAKE_BUILD_TYPE}")
