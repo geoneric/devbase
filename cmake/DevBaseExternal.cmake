@@ -268,6 +268,14 @@ if(DEVBASE_HPX_USEFUL OR DEVBASE_HPX_REQUIRED)
         message(STATUS "  libraries: ${HPX_LIBRARIES}")
 
         include_directories(${HPX_INCLUDE_DIRS})
+
+        # Check whether we are using the same build type as HPX
+        if (NOT "${HPX_BUILD_TYPE}" STREQUAL "${CMAKE_BUILD_TYPE}")
+            message(WARNING
+                "CMAKE_BUILD_TYPE does not match HPX_BUILD_TYPE: "
+                "\"${CMAKE_BUILD_TYPE}\" != \"${HPX_BUILD_TYPE}\"\n"
+                "ABI compatibility is not guaranteed. Expect link errors.")
+        endif()
     endif()
 endif()
 
