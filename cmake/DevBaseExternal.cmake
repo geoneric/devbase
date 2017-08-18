@@ -59,7 +59,9 @@ if(DEVBASE_BOOST_REQUIRED)
         "${CMAKE_CXX_FLAGS_RELEASE} -DBOOST_DISABLE_ASSERTS"
     )
     list(REMOVE_DUPLICATES DEVBASE_REQUIRED_BOOST_COMPONENTS)
-    find_package(Boost REQUIRED
+    find_package(Boost
+        ${DEVBASE_BOOST_VERSION}  # If set, minimum version of boost to find
+        REQUIRED
         COMPONENTS ${DEVBASE_REQUIRED_BOOST_COMPONENTS})
     if(NOT Boost_FOUND)
         message(FATAL_ERROR "Boost not found")
