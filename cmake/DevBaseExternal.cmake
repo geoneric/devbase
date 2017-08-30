@@ -183,7 +183,8 @@ endif()
 
 
 if(DEVBASE_GDAL_USEFUL OR DEVBASE_GDAL_REQUIRED)
-    find_package(GDAL)
+    find_package(GDAL
+        ${DEVBASE_REQUIRED_GDAL_VERSION})
 
     if(DEVBASE_GDAL_REQUIRED AND NOT GDAL_FOUND)
         message(FATAL_ERROR "GDAL not found")
