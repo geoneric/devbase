@@ -54,10 +54,10 @@ if(DEVBASE_BOOST_REQUIRED)
         # -DBOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
         # -DBOOST_CHRONO_HEADER_ONLY
     )
-    set(CMAKE_CXX_FLAGS_RELEASE
-        # Disable range checks in release builds.
-        "${CMAKE_CXX_FLAGS_RELEASE} -DBOOST_DISABLE_ASSERTS"
-    )
+    ### set(CMAKE_CXX_FLAGS_RELEASE
+    ###     # Disable range checks in release builds.
+    ###     "${CMAKE_CXX_FLAGS_RELEASE} -DBOOST_DISABLE_ASSERTS"
+    ### )
     list(REMOVE_DUPLICATES DEVBASE_REQUIRED_BOOST_COMPONENTS)
     find_package(Boost
         ${DEVBASE_BOOST_VERSION}  # If set, minimum version of boost to find
@@ -66,13 +66,6 @@ if(DEVBASE_BOOST_REQUIRED)
     if(NOT Boost_FOUND)
         message(FATAL_ERROR "Boost not found")
     endif()
-    include_directories(
-        SYSTEM
-        ${Boost_INCLUDE_DIRS}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${Boost_LIBRARIES}
-    )
     message(STATUS "  includes : ${Boost_INCLUDE_DIRS}")
     message(STATUS "  libraries: ${Boost_LIBRARIES}")
 
@@ -96,13 +89,6 @@ endif()
 
 if(DEVBASE_CURL_REQUIRED)
     find_package(CURL REQUIRED)
-    include_directories(
-        SYSTEM
-        ${CURL_INCLUDE_DIRS}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${CURL_LIBRARIES}
-    )
 endif()
 
 
@@ -112,10 +98,6 @@ if(DEVBASE_CURSES_REQUIRED)
     find_package(Curses REQUIRED)
     # Check CURSES_HAVE_NCURSES_H -> cursesw.h in .../include
     # Check CURSES_HAVE_NCURSES_NCURSES_H -> curses.h in .../ncursesw
-    include_directories(
-        SYSTEM
-        ${CURSES_INCLUDE_DIRS}  # /ncursesw
-    )
 
     if(NOT DEFINED DEVBASE_CURSES_WIDE_CHARACTER_SUPPORT_REQUIRED)
         set(DEVBASE_CURSES_WIDE_CHARACTER_SUPPORT_REQUIRED TRUE)
@@ -124,23 +106,11 @@ if(DEVBASE_CURSES_REQUIRED)
     if(DEVBASE_CURSES_WIDE_CHARACTER_SUPPORT_REQUIRED)
         set(CURSES_LIBRARIES formw menuw ncursesw)
     endif()
-
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${CURSES_LIBRARIES}
-    )
 endif()
 
 
 if(DEVBASE_DOCOPT_REQUIRED)
     find_package(Docopt REQUIRED)
-
-    include_directories(
-        SYSTEM
-        ${DOCOPT_INCLUDE_DIRS}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${DOCOPT_LIBRARIES}
-    )
 endif()
 
 
@@ -155,13 +125,6 @@ endif()
 
 if(DEVBASE_EXPAT_REQUIRED)
     find_package(EXPAT REQUIRED)
-    include_directories(
-        SYSTEM
-        ${EXPAT_INCLUDE_DIRS}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${EXPAT_LIBRARIES}
-    )
 endif()
 
 
@@ -171,14 +134,6 @@ if(DEVBASE_FERN_REQUIRED)
     if(NOT FERN_FOUND)
         message(FATAL_ERROR "Fern not found")
     endif()
-
-    include_directories(
-        SYSTEM
-        ${FERN_INCLUDE_DIRS}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${FERN_LIBRARIES}
-    )
 endif()
 
 
@@ -190,13 +145,6 @@ if(DEVBASE_GDAL_USEFUL OR DEVBASE_GDAL_REQUIRED)
         message(FATAL_ERROR "GDAL not found")
     endif()
 
-    include_directories(
-        SYSTEM
-        ${GDAL_INCLUDE_DIRS}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${GDAL_LIBRARIES}
-    )
     find_program(GDAL_TRANSLATE gdal_translate
         HINTS ${GDAL_INCLUDE_DIR}/../bin
     )
@@ -213,13 +161,6 @@ endif()
 
 if(DEVBASE_GEOS_REQUIRED)
     find_package(GEOS REQUIRED)
-    include_directories(
-        SYSTEM
-        ${GEOS_INCLUDE_DIR}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${GEOS_LIBRARY}
-    )
 endif()
 
 
@@ -239,13 +180,6 @@ if(DEVBASE_HDF5_REQUIRED)
     if(NOT HDF5_FOUND)
         message(FATAL_ERROR "HDF5 not found")
     endif()
-    include_directories(
-        SYSTEM
-        ${HDF5_INCLUDE_DIRS}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${HDF5_LIBRARIES}
-    )
     add_definitions(${HDF5_DEFINITIONS})
 endif()
 
@@ -269,11 +203,6 @@ if(DEVBASE_HPX_USEFUL OR DEVBASE_HPX_REQUIRED)
         message(STATUS "Found HPX")
         message(STATUS "  includes : ${HPX_INCLUDE_DIRS}")
         message(STATUS "  libraries: ${HPX_LIBRARIES}")
-
-        include_directories(
-            SYSTEM
-            ${HPX_INCLUDE_DIRS}
-        )
 
         # Check whether we are using the same build type as HPX
         if (NOT "${HPX_BUILD_TYPE}" STREQUAL "${CMAKE_BUILD_TYPE}")
@@ -331,11 +260,6 @@ if(DEVBASE_NLOHMANN_JSON_REQUIRED)
     endif()
 
     message(STATUS "Found nlohmann json: ${JSON_INCLUDE_DIR}")
-
-    include_directories(
-        SYSTEM
-        ${JSON_INCLUDE_DIR}
-    )
 endif()
 
 
@@ -350,28 +274,13 @@ if(DEVBASE_MPI_REQUIRED)
     if(NOT MPI_C_FOUND)
         message(FATAL_ERROR "MPI for C not found")
     endif()
-
-    include_directories(
-        SYSTEM
-        ${MPI_C_INCLUDE_PATH}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${MPI_C_LIBRARIES}
-    )
 endif()
 
 
 if(DEVBASE_NETCDF_REQUIRED)
     find_package(NetCDF REQUIRED)
-    include_directories(
-        SYSTEM
-        ${NETCDF_INCLUDE_DIRS}
-    )
     find_program(NCGEN ncgen
         HINTS ${NETCDF_INCLUDE_DIRS}/../bin
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${NETCDF_LIBRARIES}
     )
     message(STATUS "Found NetCDF:")
     message(STATUS "  includes : ${NETCDF_INCLUDE_DIRS}")
@@ -381,10 +290,6 @@ endif()
 
 if(DEVBASE_NUMPY_REQUIRED)
     find_package(NumPy REQUIRED)
-    include_directories(
-        SYSTEM
-        ${NUMPY_INCLUDE_DIRS}
-    )
     # http://docs.scipy.org/doc/numpy-dev/reference/c-api.deprecations.html
     add_definitions(-DNPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION)
 endif()
@@ -392,14 +297,6 @@ endif()
 
 if(DEVBASE_OPENGL_REQUIRED)
     find_package(OpenGL REQUIRED)
-
-    include_directories(
-        SYSTEM
-        ${OPENGL_INCLUDE_DIR}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${OPENGL_LIBRARIES}
-    )
 endif()
 
 
@@ -419,13 +316,6 @@ if(DEVBASE_PCRASTER_RASTER_FORMAT_REQUIRED)
         message(FATAL_ERROR "PCRaster Raster Format library not found")
     endif()
 
-    include_directories(
-        ${PCRASTER_RASTER_FORMAT_INCLUDE_DIRS}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${PCRASTER_RASTER_FORMAT_LIBRARIES}
-    )
-
     message(STATUS "Found PCRaster Raster Format:")
     message(STATUS "  includes : ${PCRASTER_RASTER_FORMAT_INCLUDE_DIRS}")
     message(STATUS "  libraries: ${PCRASTER_RASTER_FORMAT_LIBRARIES}")
@@ -438,36 +328,22 @@ if(DEVBASE_PYBIND11_REQUIRED)
     if(NOT PYBIND11_FOUND)
         message(FATAL_ERROR "pybind11 library not found")
     endif()
-
-    include_directories(
-        SYSTEM
-        ${PYBIND11_INCLUDE_DIRS}
-    )
 endif()
 
 
 # This one first, before FindPythonLibs. See CMake docs.
 if(DEVBASE_PYTHON_INTERP_REQUIRED)
-    if(DEFINED DEVBASE_REQUIRED_PYTHON_VERSION)
-        set(Python_ADDITIONAL_VERSIONS ${DEVBASE_REQUIRED_PYTHON_VERSION})
-    endif()
-
-    find_package(PythonInterp REQUIRED)
+    find_package(PythonInterp
+        ${DEVBASE_REQUIRED_PYTHON_VERSION}
+        REQUIRED
+    )
 endif()
 
 
 if(DEVBASE_PYTHON_LIBS_REQUIRED)
-    if(DEFINED DEVBASE_REQUIRED_PYTHON_VERSION)
-        set(Python_ADDITIONAL_VERSIONS ${DEVBASE_REQUIRED_PYTHON_VERSION})
-    endif()
-
-    find_package(PythonLibs REQUIRED)
-    include_directories(
-        SYSTEM
-        ${PYTHON_INCLUDE_DIRS}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${PYTHON_LIBRARIES}
+    find_package(PythonLibs
+        ${DEVBASE_REQUIRED_PYTHON_VERSION}
+        REQUIRED
     )
 endif()
 
@@ -483,10 +359,6 @@ if(DEVBASE_QT_REQUIRED)
 
         # Explicitly configure Qt's include directory. This is also done in
         # ${QT_USE_FILE} above, but we want to shove the SYSTEM option in.
-        include_directories(
-            SYSTEM
-            ${QT_INCLUDE_DIR}
-        )
     else()
         # http://doc.qt.io/qt-5/cmake-manual.html
 
@@ -518,13 +390,6 @@ if(DEVBASE_QWT_REQUIRED)
         message(FATAL_ERROR "Qwt not found")
     endif()
 
-    include_directories(
-        SYSTEM
-        ${QWT_INCLUDE_DIR}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${QWT_LIBRARY}
-    )
     message(STATUS "Found Qwt:")
     message(STATUS "  includes : ${QWT_INCLUDE_DIRS}")
     message(STATUS "  libraries: ${QWT_LIBRARIES}")
@@ -533,13 +398,6 @@ endif()
 
 if(DEVBASE_READLINE_REQUIRED)
     find_package(Readline REQUIRED)
-    include_directories(
-        SYSTEM
-        ${READLINE_INCLUDE_DIR}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${READLINE_LIBRARY}
-    )
 endif()
 
 
@@ -565,22 +423,11 @@ endif()
 
 if(DEVBASE_XERCES_REQUIRED)
     find_package(XercesC REQUIRED)
-    include_directories(
-        SYSTEM
-        ${XercesC_INCLUDE_DIRS}
-    )
-    list(APPEND DEVBASE_EXTERNAL_LIBRARIES
-        ${XercesC_LIBRARIES}
-    )
 endif()
 
 
 if(DEVBASE_XSD_REQUIRED)
     find_package(XSD REQUIRED)
-    include_directories(
-        SYSTEM
-        ${XSD_INCLUDE_DIRS}
-    )
     list(APPEND DEVBASE_EXTERNAL_SOURCES ${XSD_INCLUDE_DIRS})
     list(APPEND DEVBASE_DOXYGEN_EXTERNAL_SOURCES_FILE_PATTERNS *.ixx)
     list(APPEND DEVBASE_DOXYGEN_EXTERNAL_SOURCES_FILE_PATTERNS *.txx)
@@ -594,3 +441,13 @@ endif()
 # DoxygenDoc.cmake.
 string(REPLACE ";" " " DEVBASE_DOXYGEN_EXTERNAL_SOURCES_FILE_PATTERNS
     "${DEVBASE_DOXYGEN_EXTERNAL_SOURCES_FILE_PATTERNS}")
+
+
+function(__deprecated_var var access)
+    if(access STREQUAL "READ_ACCESS")
+        message(DEPRECATION
+            "The variable '${var}' is deprecated!")
+    endif()
+endfunction()
+
+variable_watch(DEVBASE_EXTERNAL_LIBRARIES __deprecated_var)
