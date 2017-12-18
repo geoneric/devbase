@@ -5,7 +5,7 @@ import sys
 
 def execute(
         command,
-        working_directory=os.getcwd):
+        working_directory=os.getcwd()):
 
     try:
         result = subprocess.run(
