@@ -43,7 +43,7 @@ def file_is_binary(
         CHUNKSIZE = 1024
         while 1:
             chunk = file_.read(CHUNKSIZE)
-            if "\0" in chunk:  # Found null byte.
+            if b"\0" in chunk:  # Found null byte.
                 return True
             if len(chunk) < CHUNKSIZE:
                 break
@@ -384,32 +384,32 @@ def file_is_dll_client(
 ###         "win32" : shell_path_name_win32
 ###     }
 ###     return shell_path_name_by_platform[sys.platform](path_name)
-### 
-### 
-### 
-### def file_names_in_root_of_directory(
-###         directory_path_name):
-###     """
-###     .. todo::
-### 
-###        Document.
-### 
-###     """
-###     directory_names = []
-###     file_names = []
-### 
-###     for triple in os.walk(directory_path_name, topdown=True):
-###         path_name = triple[0]
-###         relative_path_name = os.path.relpath(path_name, directory_path_name)
-### 
-###         if not os.path.dirname(relative_path_name):
-###             if relative_path_name == ".":
-###                 file_names = triple[2]
-###             else:
-###                 directory_names.append(relative_path_name)
-###     return directory_names, file_names
-### 
-### 
+
+
+
+def file_names_in_root_of_directory(
+        directory_path_name):
+    """
+    .. todo::
+
+       Document.
+
+    """
+    directory_names = []
+    file_names = []
+
+    for triple in os.walk(directory_path_name, topdown=True):
+        path_name = triple[0]
+        relative_path_name = os.path.relpath(path_name, directory_path_name)
+
+        if not os.path.dirname(relative_path_name):
+            if relative_path_name == ".":
+                file_names = triple[2]
+            else:
+                directory_names.append(relative_path_name)
+    return directory_names, file_names
+
+
 ### def copy_different_or_equal_files(
 ###         source_directory_path_name,
 ###         destination_directory_path_name):

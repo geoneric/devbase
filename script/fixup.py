@@ -1,5 +1,4 @@
-#!/usr/bin/env pythonwrapper
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
 """Fixup
 
 Usage:
@@ -17,7 +16,7 @@ import os
 import shutil
 import sys
 import docopt
-import devenv
+import devbase
 
 
 class FileInfo(object):
@@ -31,7 +30,7 @@ class FileInfo(object):
             self.base_name)
 
     def is_dll_client(self):
-        return devenv.file_is_dll_client(self.absolute_file_name)
+        return devbase.file_is_dll_client(self.absolute_file_name)
 
     def __repr__(self):
         return "FileInfo(\"{}\", \"{}\")".format(self.directory_name,
@@ -50,10 +49,10 @@ def find_project_dll_clients(
             file_info = FileInfo(directory_name, file_name)
             if file_info.is_dll_client():
                 assert not os.path.islink(file_info.absolute_file_name)
-                assert devenv.file_is_binary(
+                assert devbase.file_is_binary(
                     file_info.absolute_file_name), file_info.absolute_file_name
                 if sys.platform == "win32":
-                    assert devenv.file_is_executable(
+                    assert devbase.file_is_executable(
                         file_info.absolute_file_name), \
                             file_info.absolute_file_name
                 file_infos.append(FileInfo(directory_name, file_name))
@@ -66,20 +65,24 @@ def find_external_dlls(
         external_prefix,
         project_dll_clients):
     shared_library_names, missing_shared_library_names = \
-        devenv.shared_library_dependencies([dll_client.absolute_file_name for
+        devbase.shared_library_dependencies([dll_client.absolute_file_name for
             dll_client in project_dll_clients])
+
+    # print("shared_library_names        : {}".format(shared_library_names))
+    # print("missing_shared_library_names: {}".format(missing_shared_library_names))
 
     # Only select the dlls from the external software prefix. Skip those that
     # are already in the project prefix.
     shared_library_names = [dll_file_name for dll_file_name in \
             shared_library_names if
-                (not devenv.path_names_are_equal(
-                    devenv.commonprefix([dll_file_name, external_prefix]),
+                (not devbase.path_names_are_equal(
+                    devbase.commonprefix([dll_file_name, external_prefix]),
                     project_prefix)) and
-                (devenv.path_names_are_equal(
-                    devenv.commonprefix([dll_file_name, external_prefix]),
+                (devbase.path_names_are_equal(
+                    devbase.commonprefix([dll_file_name, external_prefix]),
                     external_prefix))
     ]
+    # print("shared_library_names        : {}".format(shared_library_names))
 
     # See if the missing shared library names can be found in external_prefix's
     # lib directory.
@@ -118,7 +121,7 @@ def fixup_dll_clients(
         project_dll_clients,
         project_prefix):
     for dll_client in project_dll_clients:
-        devenv.fixup_dll_client(dll_client.absolute_file_name, project_prefix)
+        devbase.fixup_dll_client(dll_client.absolute_file_name, project_prefix)
 
 
 def fixup(
