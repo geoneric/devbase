@@ -58,6 +58,6 @@ add_custom_command(
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
 )
 
-add_custom_target(cpp_doc ALL
+add_custom_target(cpp_doc
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
 )
