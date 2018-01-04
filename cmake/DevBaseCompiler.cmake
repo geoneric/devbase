@@ -65,7 +65,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
     # -Wconversion
     # -Wsign-conversion
     set(CMAKE_CXX_FLAGS
-        "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -ftemplate-backtrace-limit=0 -Wfloat-equal"
+        "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -ftemplate-backtrace-limit=0"
     )
 
     # This results in an error on mingw/gcc 4.8/windows. Some warning about
@@ -112,7 +112,9 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
     # Handle case where C compiler is gcc and not clang.
 
     set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow -Wno-unused-parameter"
+        "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -Wcast-qual -Wwrite-strings -Werror=strict-aliasing -fno-strict-overflow"
+        # If you need this, add it to your project's CMakeLists.txt.
+        # -Wno-unused-parameter"
     )
 
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -U_FORTIFY_SOURCE")
@@ -160,11 +162,11 @@ if(peacock_compiler_found)
     # If the PEACOCK_PREFIX CMake variable is not set, but an environment
     # variable with that name is, then copy it to a CMake variable. This way
     # the CMake variable takes precedence.
-    if((NOT PEACOCK_PREFIX) AND (DEFINED ENV{PEACOCK_PREFIX}))
+    if((NOT DEFINED PEACOCK_PREFIX) AND (DEFINED ENV{PEACOCK_PREFIX}))
         set(PEACOCK_PREFIX $ENV{PEACOCK_PREFIX})
     endif()
 
-    if(PEACOCK_PREFIX)
+    if((DEFINED PEACOCK_PREFIX) AND PEACOCK_PREFIX)
         # PEACOCK_PREFIX takes precedence over all other paths.
 
         # # if cross compiling:

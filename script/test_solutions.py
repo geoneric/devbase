@@ -29,7 +29,7 @@ Options:
 The prefix directory will be used to store directories and files. It
 is probably a good idea if this directory is empty.
 """.format(
-        command = os.path.basename(sys.argv[0]))
+    command=os.path.basename(sys.argv[0]))
 
 
 def log_debug(
@@ -66,10 +66,11 @@ def execute_command(
 
     try:
         log_debug(logger, "execute: {}".format(command))
-        messages = subprocess.check_output(shlex.split(command),
-            stderr=subprocess.STDOUT, universal_newlines=True)
+        messages = subprocess.check_output(
+            shlex.split(command), stderr=subprocess.STDOUT,
+            universal_newlines=True)
         log_debug(logger, messages)
-    except subprocess.CalledProcessError, exception:
+    except subprocess.CalledProcessError as exception:
         log_error(logger, exception.output)
         raise
 
@@ -79,8 +80,15 @@ def execute_command(
 def box_name_to_filename(
         box_name):
 
-    return "".join(c if (c.isalnum() or c in "._- ") else "_"
-        for c in box_name)
+    return "".join(
+        c if (c.isalnum() or c in "._- ") else "_" for c in box_name)
+
+
+def unique_box_directory_name(
+        box_name,
+        idx):
+
+    return "{}-{}".format(box_name_to_filename(box_name), idx)
 
 
 def vagrant_box_exists(
@@ -124,6 +132,7 @@ def configure_vagrant_box(
     # Replace the default Vagrant configuration file with a new one.
     vagrant_configuration = """\
 Vagrant.configure(2) do |config|
+    config.ssh.keep_alive = true
     config.vm.box = "{box_name}"
     config.vm.synced_folder ".", "/shared"
 
@@ -150,13 +159,13 @@ Vagrant.configure(2) do |config|
     {provisions}
 end
 """.format(
-            box_name=box_name,
-            nr_cpus=nr_cpus,
-            amount_of_memory=amount_of_memory,
-            provisions="\n    ".join(provisions)
-        )
+        box_name=box_name,
+        nr_cpus=nr_cpus,
+        amount_of_memory=amount_of_memory,
+        provisions="\n    ".join(provisions)
+    )
 
-    file("Vagrantfile", "w").write(vagrant_configuration)
+    open("Vagrantfile", "w").write(vagrant_configuration)
 
     # TODO Add provisions to the VagrantFile
 
@@ -172,8 +181,8 @@ def create_vagrant_box(
         add_vagrant_box(logger, box_name)
 
     initialize_vagrant_box(logger, box_name)
-    configure_vagrant_box(logger, box_name, nr_cpus, amount_of_memory,
-        provisions)
+    configure_vagrant_box(
+        logger, box_name, nr_cpus, amount_of_memory, provisions)
 
 
 def start_vagrant_box(
@@ -233,11 +242,21 @@ def destroy_vagrant_box(
     execute_command(logger, command)
 
 
+def update_vagrant_box(
+        logger,
+        box_name):
+
+    command = "vagrant box update --box {}".format(box_name)
+    log_info(logger, "update vagrant box")
+    execute_command(logger, command)
+
+
 def test_solution(
         prefix_pathname,
         nr_cpus,
         amount_of_memory,
-        solution):
+        solution,
+        idx):
     label = solution["label"]
     box_name = solution["box"]
     provisions = solution["provisions"]
@@ -248,13 +267,15 @@ def test_solution(
     log_debug(logger, json.dumps(solution))
 
     cwd = os.getcwd()
-    os.chdir(os.path.join(prefix_pathname, box_name_to_filename(box_name)))
+    os.chdir(os.path.join(prefix_pathname, unique_box_directory_name(
+        box_name, idx)))
     status = 1
 
     try:
 
-        create_vagrant_box(logger, box_name, nr_cpus, amount_of_memory,
-            provisions)
+        update_vagrant_box(logger, box_name)
+        create_vagrant_box(
+            logger, box_name, nr_cpus, amount_of_memory, provisions)
 
         try:
 
@@ -273,7 +294,7 @@ def test_solution(
 
             status = 0
 
-        except subprocess.CalledProcessError, exception:
+        except subprocess.CalledProcessError as exception:
 
             # Log the exception to the screen. The command's output is
             # already logged (to the file and to the screen).
@@ -284,7 +305,7 @@ def test_solution(
             # Something went wrong: keep the virtual machine for inspection.
             suspend_vagrant_box(logger)
 
-    except Exception, exception:
+    except Exception as exception:
 
         # If we ever end up here, we must fix the script.
         log_critical(logger, "uncaught exception: {}".format(exception))
@@ -307,9 +328,10 @@ def initialize_prefix(
     """
     assert os.path.exists(prefix_pathname)
 
-    for box_name in box_names:
-        os.mkdir(os.path.join(prefix_pathname, box_name_to_filename(
-            box_name)))
+    for idx in range(len(box_names)):
+        box_name = box_names[idx]
+        os.mkdir(os.path.join(prefix_pathname, unique_box_directory_name(
+            box_name, idx)))
 
 
 def setup_logger(
@@ -338,9 +360,11 @@ def setup_loggers(
 
     setup_logger("screen", level=logging.INFO)
 
-    for box_name in box_names:
-        logger_pathname = "{}.log".format(os.path.join(prefix_pathname,
-            box_name_to_filename(box_name)))
+    for idx in range(len(box_names)):
+        box_name = box_names[idx]
+        logger_pathname = "{}.log".format(
+            os.path.join(prefix_pathname, unique_box_directory_name(
+                box_name, idx)))
         setup_logger(box_name, logger_pathname, logging.DEBUG)
 
 
@@ -362,16 +386,17 @@ def test_solutions(
 
     failures = []
 
-    for solution in solutions:
-        failures.append(test_solution(prefix_pathname, nr_cpus,
-            amount_of_memory, solution) != 0)
+    for idx in range(len(solutions)):
+        solution = solutions[idx]
+        failures.append(test_solution(
+            prefix_pathname, nr_cpus, amount_of_memory, solution, idx) != 0)
 
     if not any(failures):
         logging.getLogger("screen").info("All solutions succeeded")
     else:
         logging.getLogger("screen").error("The folowing solutions failed:")
 
-        for i in xrange(len(failures)):
+        for i in range(len(failures)):
             if failures[i]:
                 logging.getLogger("screen").error("    {}".format(
                     solutions[i]["label"]))
@@ -394,7 +419,7 @@ if __name__ == "__main__":
 
     nr_cpus = 2
     if arguments["--cpus"] is not None:
-        nr_cpus = arguments["--cpus"]
+        nr_cpus = int(arguments["--cpus"])
         assert nr_cpus > 0, nr_cpus
 
     amount_of_memory = 4096
@@ -404,5 +429,5 @@ if __name__ == "__main__":
 
     configuration_pathname = arguments["<configuration>"]
 
-    sys.exit(test_solutions(prefix, nr_cpus, amount_of_memory,
-        configuration_pathname))
+    sys.exit(test_solutions(
+        prefix, nr_cpus, amount_of_memory, configuration_pathname))
