@@ -157,7 +157,7 @@ end
         provisions="\n    ".join(provisions)
     )
 
-    file("Vagrantfile", "w").write(vagrant_configuration)
+    open("Vagrantfile", "w").write(vagrant_configuration)
 
     # TODO Add provisions to the VagrantFile
 
@@ -372,7 +372,7 @@ def test_solutions(
     else:
         logging.getLogger("screen").error("The folowing solutions failed:")
 
-        for i in xrange(len(failures)):
+        for i in range(len(failures)):
             if failures[i]:
                 logging.getLogger("screen").error("    {}".format(
                     solutions[i]["label"]))
@@ -395,7 +395,7 @@ if __name__ == "__main__":
 
     nr_cpus = 2
     if arguments["--cpus"] is not None:
-        nr_cpus = arguments["--cpus"]
+        nr_cpus = int(arguments["--cpus"])
         assert nr_cpus > 0, nr_cpus
 
     amount_of_memory = 4096
