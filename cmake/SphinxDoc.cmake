@@ -25,6 +25,7 @@ function(create_sphinx_docs)
         # CMake generated file.
         ${CMAKE_CURRENT_SOURCE_DIR}/Makefile.in
         ${CMAKE_CURRENT_BINARY_DIR}/Makefile-sphinx
+        @ONLY
     )
 
     foreach(NAME ${SPHINX_DOCS_SOURCES})
@@ -64,7 +65,7 @@ function(create_sphinx_docs)
             ${COPIED_SPHINX_SOURCES}
     )
 
-    add_custom_target(${SPHINX_DOCS_TARGET} ALL
+    add_custom_target(${SPHINX_DOCS_TARGET}
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_build/html/index.html
     )
 endfunction()

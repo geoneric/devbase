@@ -174,6 +174,7 @@ macro(add_unit_test)
     set(ONE_VALUE_ARGUMENTS SCOPE NAME)
     set(MULTI_VALUE_ARGUMENTS
         SUPPORT_NAMES
+        INCLUDE_DIRS
         OBJECT_LIBRARIES
         LINK_LIBRARIES
         DEPENDENCIES
@@ -191,14 +192,23 @@ macro(add_unit_test)
 
     set(TEST_MODULE_NAME ${ADD_UNIT_TEST_NAME})
     set(TEST_EXE_NAME ${ADD_UNIT_TEST_SCOPE}_${TEST_MODULE_NAME})
+    string(REPLACE "/" "_" TEST_EXE_NAME ${TEST_EXE_NAME})
 
     add_executable(${TEST_EXE_NAME} ${TEST_MODULE_NAME}
         ${ADD_UNIT_TEST_SUPPORT_NAMES}
         ${ADD_UNIT_TEST_OBJECT_LIBRARIES})
-
+    target_compile_definitions(${TEST_EXE_NAME}
+        PRIVATE
+            BOOST_ALL_DYN_LINK
+    )
+    target_include_directories(${TEST_EXE_NAME}
+        PRIVATE
+            ${ADD_UNIT_TEST_INCLUDE_DIRS}
+            ${Boost_INCLUDE_DIRS})
     target_link_libraries(${TEST_EXE_NAME}
-        ${ADD_UNIT_TEST_LINK_LIBRARIES}
-        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+        PRIVATE
+            ${ADD_UNIT_TEST_LINK_LIBRARIES}
+            Boost::unit_test_framework)
 
     add_test(NAME ${TEST_EXE_NAME}
         # catch_system_errors: Prevent UTF to detect system errors. This
@@ -233,6 +243,7 @@ function(add_unit_tests)
     set(MULTI_VALUE_ARGUMENTS
         NAMES
         SUPPORT_NAMES
+        INCLUDE_DIRS
         OBJECT_LIBRARIES
         LINK_LIBRARIES
         DEPENDENCIES
@@ -253,6 +264,7 @@ function(add_unit_tests)
             SCOPE ${ADD_UNIT_TESTS_SCOPE}
             NAME ${NAME}
             SUPPORT_NAMES ${ADD_UNIT_TESTS_SUPPORT_NAMES}
+            INCLUDE_DIRS ${ADD_UNIT_TESTS_INCLUDE_DIRS}
             OBJECT_LIBRARIES ${ADD_UNIT_TESTS_OBJECT_LIBRARIES}
             LINK_LIBRARIES ${ADD_UNIT_TESTS_LINK_LIBRARIES})
         set(target_name ${ADD_UNIT_TESTS_SCOPE}_${NAME})

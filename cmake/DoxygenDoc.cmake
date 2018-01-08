@@ -6,6 +6,9 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     set(DEVBASE_DOXYGEN_GENERATE_TODOLIST "YES")
 endif()
 
+# DEVBASE_DOXYGEN_INPUT is a list of pathnames. Turn it into a string with
+# pathnames separated by spaces.
+string(REPLACE ";" " " DEVBASE_DOXYGEN_INPUT "${DEVBASE_DOXYGEN_INPUT}")
 
 set(DOXYGEN_TEMPLATE "
     ALWAYS_DETAILED_SEC     = YES
@@ -58,6 +61,6 @@ add_custom_command(
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
 )
 
-add_custom_target(cpp_doc ALL
+add_custom_target(cpp_doc
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
 )
