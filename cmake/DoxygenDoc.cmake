@@ -61,6 +61,8 @@ add_custom_command(
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
 )
 
-add_custom_target(cpp_doc
+# This target should be built by default, because otherwise the results won't
+# be available when the user wants to install the generated documentation
+add_custom_target(cpp_doc ALL
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
 )
