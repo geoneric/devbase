@@ -148,11 +148,11 @@ if(DEVBASE_GDAL_USEFUL OR DEVBASE_GDAL_REQUIRED)
     find_program(GDAL_TRANSLATE gdal_translate
         HINTS ${GDAL_INCLUDE_DIR}/../bin
     )
-    # TODO This dir isn't correct. GDAL_DIRECTORY is not defined.
-    if(WIN32)
-        SET(GDAL_DATA ${GDAL_DIRECTORY}/data)
-    else()
-        SET(GDAL_DATA ${GDAL_DIRECTORY}/share/gdal)
+
+    set(GDAL_DATA ${GDAL_INCLUDE_DIR}/../share/gdal)
+
+    if(NOT EXISTS "${GDAL_DATA}")
+        message(FATAL_ERROR "GDal data dir not found")
     endif()
 
     include(CheckGDalLibrary)
