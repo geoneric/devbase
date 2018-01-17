@@ -258,8 +258,6 @@ if(DEVBASE_NLOHMANN_JSON_REQUIRED)
     if(NOT nlohmann_json_FOUND)
         message(FATAL_ERROR "nlohmann json not found")
     endif()
-
-    message(STATUS "Found nlohmann json: ${JSON_INCLUDE_DIR}")
 endif()
 
 
@@ -322,15 +320,6 @@ if(DEVBASE_PCRASTER_RASTER_FORMAT_REQUIRED)
 endif()
 
 
-if(DEVBASE_PYBIND11_REQUIRED)
-    find_package(Pybind11 REQUIRED)
-
-    if(NOT PYBIND11_FOUND)
-        message(FATAL_ERROR "pybind11 library not found")
-    endif()
-endif()
-
-
 # This one first, before FindPythonLibs. See CMake docs.
 if(DEVBASE_PYTHON_INTERP_REQUIRED)
     find_package(PythonInterp
@@ -345,6 +334,18 @@ if(DEVBASE_PYTHON_LIBS_REQUIRED)
         ${DEVBASE_REQUIRED_PYTHON_VERSION}
         REQUIRED
     )
+endif()
+
+
+# Pybind11 ships its own FindPython module. Keep this block after the above
+# call to CMake's FindPython. Otherwise find_package(PythonLibs) fails (at
+# least on macOS / MacPorts.
+if(DEVBASE_PYBIND11_REQUIRED)
+    find_package(pybind11 REQUIRED)
+
+    if(NOT pybind11_FOUND)
+        message(FATAL_ERROR "pybind11 library not found")
+    endif()
 endif()
 
 
