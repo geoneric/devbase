@@ -68,21 +68,17 @@ def find_external_dlls(
         devbase.shared_library_dependencies([dll_client.absolute_file_name for
             dll_client in project_dll_clients])
 
-    # print("shared_library_names        : {}".format(shared_library_names))
-    # print("missing_shared_library_names: {}".format(missing_shared_library_names))
-
     # Only select the dlls from the external software prefix. Skip those that
     # are already in the project prefix.
     shared_library_names = [dll_file_name for dll_file_name in \
-            shared_library_names if
-                (not devbase.path_names_are_equal(
-                    devbase.commonprefix([dll_file_name, external_prefix]),
-                    project_prefix)) and
-                (devbase.path_names_are_equal(
-                    devbase.commonprefix([dll_file_name, external_prefix]),
-                    external_prefix))
+        shared_library_names if
+            (not devbase.path_names_are_equal(
+                devbase.commonprefix([dll_file_name, external_prefix]),
+                project_prefix)) and
+            (devbase.path_names_are_equal(
+                devbase.commonprefix([dll_file_name, external_prefix]),
+                external_prefix))
     ]
-    # print("shared_library_names        : {}".format(shared_library_names))
 
     # See if the missing shared library names can be found in external_prefix's
     # lib directory.
@@ -134,8 +130,8 @@ def fixup(
         raise ValueError("External prefix {} does not exist".format(
             external_prefix))
     project_dll_clients = find_project_dll_clients(project_prefix)
-    external_dlls = find_external_dlls(project_prefix, external_prefix,
-        project_dll_clients)
+    external_dlls = find_external_dlls(
+        project_prefix, external_prefix, project_dll_clients)
     copied_dlls = copy_dlls_to_project(external_dlls, project_prefix)
     assert len(external_dlls) == len(copied_dlls)
     dll_clients = project_dll_clients + copied_dlls
@@ -159,6 +155,8 @@ def fixup(
 
 if __name__ == "__main__":
     arguments = docopt.docopt(__doc__)
-    project_prefix = os.path.abspath(arguments["PROJECT_PREFIX"])
-    external_prefix = os.path.abspath(arguments["EXTERNAL_PREFIX"])
+    project_prefix = os.path.normcase(
+        os.path.abspath(arguments["PROJECT_PREFIX"]))
+    external_prefix = os.path.normcase(
+        os.path.abspath(arguments["EXTERNAL_PREFIX"]))
     sys.exit(fixup(project_prefix, external_prefix))

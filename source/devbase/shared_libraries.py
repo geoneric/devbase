@@ -65,20 +65,21 @@ def determine_shared_library_dependencies_win32(
 
     known_missing_shared_library_filenames = [
         # win64
-        "api-ms-win-core-winrt-string-l1-1-0.dll",
-        "api-ms-win-core-winrt-l1-1-0.dll",
-        "api-ms-win-core-winrt-error-l1-1-0.dll",
-        "api-ms-win-shcore-scaling-l1-1-1.dll",
-        "api-ms-win-core-winrt-robuffer-l1-1-0.dll",
         "ieshims.dll",
         "dcomp.dll",
-        "api-ms-win-appmodel-runtime-l1-1-0.dll",
         "gpsvc.dll",
+
+        "devicelockhelpers.dll",
+        "emclient.dll",
 
         # win32
         "c:\windows\system32\gpsvc.dll",
         "c:\windows\system32\sysntfy.dll"
 
+    ]
+    known_missing_shared_library_name_prefixes = [
+        "api-ms-win",
+        "ext-ms-",
     ]
 
 
@@ -88,19 +89,23 @@ def determine_shared_library_dependencies_win32(
         header = next(reader, "whatever")
         for row in reader:
             shared_library_path_name = row[1].lower()
-            # Skip some Windows dlls, listed above.
-            # Skip python library. We never want to ship it.
+            # Skip some Windows dlls, listed above
+            # Skip some Windows dlls from some directories listed above
+            # Skip python library. We never want to ship it
             # Depends add the executable name itself in the output. Skip it.
             if (not shared_library_path_name in \
                     known_missing_shared_library_filenames) and \
-                    (shared_library_path_name.find("python35.dll") ==
-                    -1) and (not pathname.path_names_are_equal(
-                        shared_library_path_name, executable_name)):
+                    (not any([shared_library_path_name.startswith(prefix) for prefix in known_missing_shared_library_name_prefixes])) and \
+                    (shared_library_path_name.find("python35.dll") == -1) and \
+                    (shared_library_path_name.find("python36.dll") == -1) and \
+                    (not pathname.path_names_are_equal(shared_library_path_name, executable_name)):
+
                 if not os.path.exists(shared_library_path_name):
                     missing_shared_library_names.append(
                         shared_library_path_name)
                 else:
-                    shared_library_path_names.append(shared_library_path_name)
+                    shared_library_path_names.append(
+                        shared_library_path_name)
 
     os.remove(walker_result_filename)
     assert not os.path.exists(walker_result_filename), walker_result_filename
