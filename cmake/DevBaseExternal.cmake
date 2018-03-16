@@ -149,7 +149,11 @@ if(DEVBASE_GDAL_USEFUL OR DEVBASE_GDAL_REQUIRED)
         HINTS ${GDAL_INCLUDE_DIR}/../bin
     )
 
-    set(GDAL_DATA ${GDAL_INCLUDE_DIR}/../share/gdal)
+    if(WIN32)
+        set(GDAL_DATA ${GDAL_INCLUDE_DIR}/../share/gdal)
+    else()
+        set(GDAL_DATA ${GDAL_INCLUDE_DIR}/../../share/gdal)
+    endif()
 
     if(NOT EXISTS "${GDAL_DATA}")
         message(FATAL_ERROR "GDal data dir not found")
