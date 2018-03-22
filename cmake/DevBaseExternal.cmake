@@ -110,7 +110,16 @@ endif()
 
 
 if(DEVBASE_DOCOPT_REQUIRED)
-    find_package(Docopt REQUIRED)
+    if(CONAN_DOCOPT_ROOT)
+        find_package(docopt
+            REQUIRED
+            NO_DEFAULT_PATH
+            PATHS
+                ${CONAN_DOCOPT_ROOT}
+        )
+    else()
+        find_package(Docopt REQUIRED)
+    endif()
 endif()
 
 
@@ -257,10 +266,15 @@ endif()
 
 
 if(DEVBASE_NLOHMANN_JSON_REQUIRED)
-    find_package(nlohmann_json REQUIRED)
-
-    if(NOT nlohmann_json_FOUND)
-        message(FATAL_ERROR "nlohmann json not found")
+    if(CONAN_JSONFORMODERNCPP_ROOT)
+        find_package(nlohmann_json
+            REQUIRED
+            NO_DEFAULT_PATH
+            PATHS
+                ${CONAN_JSONFORMODERNCPP_ROOT}
+        )
+    else()
+        find_package(nlohmann_json REQUIRED)
     endif()
 endif()
 
@@ -345,10 +359,15 @@ endif()
 # call to CMake's FindPython. Otherwise find_package(PythonLibs) fails (at
 # least on macOS / MacPorts.
 if(DEVBASE_PYBIND11_REQUIRED)
-    find_package(pybind11 REQUIRED)
-
-    if(NOT pybind11_FOUND)
-        message(FATAL_ERROR "pybind11 library not found")
+    if(CONAN_PYBIND11_ROOT)
+        find_package(pybind11
+            REQUIRED
+            NO_DEFAULT_PATH
+            PATHS
+                ${CONAN_PYBIND11_ROOT}
+        )
+    else()
+        find_package(pybind11 REQUIRED)
     endif()
 endif()
 
