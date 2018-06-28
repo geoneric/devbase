@@ -137,6 +137,15 @@ if(DEVBASE_FERN_REQUIRED)
 endif()
 
 
+if(DEVBASE_FMT_REQUIRED)
+    find_package(FMT REQUIRED)
+
+    if(NOT FMT_FOUND)
+        message(FATAL_ERROR "FMT not found")
+    endif()
+endif()
+
+
 if(DEVBASE_GDAL_USEFUL OR DEVBASE_GDAL_REQUIRED)
     find_package(GDAL
         ${DEVBASE_REQUIRED_GDAL_VERSION})
