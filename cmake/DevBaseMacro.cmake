@@ -165,10 +165,13 @@ endmacro()
 # Also configures the environment to point to the location of shared libs.
 # The idea of this is to keep the dev's shell as clean as possible. Use
 # ctest command to run unit tests.
-# SCOPE: Some prefix. Often the lib name of the lib being tested.
-# NAME : Name of test module, without extension.
-# LINK_LIBRARIES: Libraries to link against.
-# DEPENDENCIES: Targets this test target depends on.
+#
+# SCOPE: Some prefix. Often the lib name of the lib being tested
+# NAME : Name of test module, without extension
+# LINK_LIBRARIES: Libraries to link against
+# DEPENDENCIES: Targets this test target depends on
+# ENVIRONMENT: Environment variables that should be defined for running
+#     the test
 macro(add_unit_test)
     set(OPTIONS "")
     set(ONE_VALUE_ARGUMENTS SCOPE NAME)
@@ -178,6 +181,7 @@ macro(add_unit_test)
         OBJECT_LIBRARIES
         LINK_LIBRARIES
         DEPENDENCIES
+        ENVIRONMENT
     )
 
     cmake_parse_arguments(ADD_UNIT_TEST "${OPTIONS}" "${ONE_VALUE_ARGUMENTS}"
@@ -233,7 +237,11 @@ macro(add_unit_test)
     endif()
 
     set_property(TEST ${TEST_EXE_NAME}
-        PROPERTY ENVIRONMENT "PATH=${PATH_STRING}")
+        PROPERTY
+            ENVIRONMENT
+                PATH=${PATH_STRING}
+                ${ADD_UNIT_TEST_ENVIRONMENT}
+    )
 endmacro()
 
 
@@ -247,6 +255,7 @@ function(add_unit_tests)
         OBJECT_LIBRARIES
         LINK_LIBRARIES
         DEPENDENCIES
+        ENVIRONMENT
     )
 
     cmake_parse_arguments(ADD_UNIT_TESTS "${OPTIONS}" "${ONE_VALUE_ARGUMENTS}"
@@ -266,7 +275,8 @@ function(add_unit_tests)
             SUPPORT_NAMES ${ADD_UNIT_TESTS_SUPPORT_NAMES}
             INCLUDE_DIRS ${ADD_UNIT_TESTS_INCLUDE_DIRS}
             OBJECT_LIBRARIES ${ADD_UNIT_TESTS_OBJECT_LIBRARIES}
-            LINK_LIBRARIES ${ADD_UNIT_TESTS_LINK_LIBRARIES})
+            LINK_LIBRARIES ${ADD_UNIT_TESTS_LINK_LIBRARIES}
+            ENVIRONMENT ${ADD_UNIT_TESTS_ENVIRONMENT})
         set(target_name ${ADD_UNIT_TESTS_SCOPE}_${NAME})
         if(ADD_UNIT_TESTS_DEPENDENCIES)
             add_dependencies(${target_name} ${ADD_UNIT_TESTS_DEPENDENCIES})
