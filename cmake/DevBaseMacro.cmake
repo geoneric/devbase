@@ -236,11 +236,10 @@ macro(add_unit_test)
         string(REPLACE ";" ":" PATH_STRING "${PATH_STRING}")
     endif()
 
-    set_property(TEST ${TEST_EXE_NAME}
-        PROPERTY
+    set_tests_properties(${TEST_EXE_NAME}
+        PROPERTIES
             ENVIRONMENT
-                PATH=${PATH_STRING}
-                ${ADD_UNIT_TEST_ENVIRONMENT}
+                "PATH=${PATH_STRING};${ADD_UNIT_TEST_ENVIRONMENT}"
     )
 endmacro()
 
