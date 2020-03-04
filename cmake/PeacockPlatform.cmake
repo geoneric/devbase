@@ -82,7 +82,8 @@ if(peacock_compiler_found)
     elseif(peacock_compiler_id STREQUAL "MSVC")
         message(${peacock_compiler_id})
         set(peacock_compiler_id "msvc")
-    elseif(peacock_compiler_id STREQUAL "Clang")
+    elseif((peacock_compiler_id STREQUAL "Clang") OR
+            (peacock_compiler_id STREQUAL "AppleClang"))
         set(peacock_compiler_id "clang")
     elseif(peacock_compiler_id STREQUAL "Intel")
         set(peacock_compiler_id "intel")
@@ -91,7 +92,7 @@ if(peacock_compiler_found)
     endif()
 
 
-    if((peacock_compiler_id STREQUAL "gcc") OR 
+    if((peacock_compiler_id STREQUAL "gcc") OR
             (peacock_compiler_id STREQUAL "mingw") OR
             (peacock_compiler_id STREQUAL "clang"))
         string(FIND ${peacock_compiler_version} "." period_index)
