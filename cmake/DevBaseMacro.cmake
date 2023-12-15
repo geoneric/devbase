@@ -239,7 +239,7 @@ macro(add_unit_test)
 
     # Maybe add ${EXECUTABLE_OUTPUT_PATH} in the future. If needed.
     set(PATH_LIST $ENV{PATH})
-    list(INSERT PATH_LIST 0 ${Boost_LIBRARY_DIRS})
+    list(INSERT PATH_LIST 0 "${Boost_LIBRARY_DIRS}")
     set(PATH_STRING "${PATH_LIST}")
 
     if(${host_system_name} STREQUAL "windows")
